@@ -1,0 +1,249 @@
+html,
+body,
+.pagina{
+    background: #2b2b2b;
+    font-family: 'Economica', sans-serif;
+    height: 100%;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+/*PAGINA DI LOGIN*/
+
+.login{
+    margin-top: 20px;
+}
+
+.paginamodpass input,
+.paginanewuser input,
+.login input{
+    height: 65px;
+    font-size: 22pt;
+    border-style: none;
+    text-align: left;
+    color: white;
+    font-family: 'Economica', sans-serif;
+}
+
+.paginamodpass input:focus,
+.paginanewuser input:focus,
+.login input:focus{
+    height: 65px;
+    font-size: 20pt;
+    border-style: none;
+    text-align: left;
+    color: white;
+    box-shadow: none;
+    border-color: #d6264f;
+}
+
+.login .ui-body-b{
+    border-color: #d6264f;
+}
+
+.login .ui-body-b:focus{
+
+    -webkit-box-shadow: 0 0 0px 	#2b2b2b ;
+    -moz-box-shadow: 0 0 0px 		#2b2b2b ;
+    box-shadow: 0 0 0px 			#2b2b2b ;
+
+}
+
+.login .ui-btn{
+    color: #2b2b2b;
+    background: #d6264f;
+    border-color: #d6264f;
+    text-shadow: none;
+    height: 60px;
+    font-family: 'Economica', sans-serif;
+    font-size: 16pt;
+}
+
+.login .ui-btn.ui-btn:focus{
+    background: #d6264f;
+    -webkit-box-shadow: 0 0 0px 	#2b2b2b ;
+    -moz-box-shadow: 0 0 0px 		#2b2b2b ;
+    box-shadow: 0 0 0px 			#2b2b2b ;
+}
+
+.login .ui-btn.ui-btn:active{
+    background-color: 		#d6264f ;
+    border-color:	 		#d6264f;
+    color: 					#fff;
+    text-shadow: 0 1px 0  #005599;
+}
+
+.login .ui-btn:hover{
+    color: #2b2b2b;
+    background: #d6264f;
+    border-color: #d6264f;
+    text-shadow: none;
+}
+
+.pagina .ui-content{
+    margin: 0 auto;
+}
+
+.login .logo{
+    margin: 0 auto;
+    width: 135px;
+    height: 163px;
+    background: url('../images/logorasp.png');
+    margin-bottom: 20px;
+}
+
+/*Pagina INDEX*/
+.paginamodpass .ui-header,
+.paginanewuser .ui-header,
+.paginamoduser .ui-header,
+.paginamenu .ui-header,
+.paginaout .ui-header{
+    height: 70px;
+    width: 100%;
+    padding-top: 0px;
+    font-size: 20pt;
+    position: fixed;
+    background: #2b2b2b;
+    border-color: #2b2b2b;
+    color: #d6264f;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+.paginamodpass .ui-footer,
+.paginanewuser .ui-footer,
+.paginamoduser .ui-footer,
+.paginaout .ui-footer,
+.paginamenu .ui-footer{
+
+    height: 30px;
+    font-size: 16pt;
+    margin-bottom: 0px;
+    z-index: 1;
+    opacity: 0.9;
+}
+
+.paginamodpass .ui-footer .ui-btn,
+.paginanewuser .ui-footer .ui-btn,
+.paginamoduser .ui-footer .ui-btn,
+.paginaout .ui-footer .ui-btn,
+.paginamenu .ui-footer .ui-btn{
+    height: 25px;
+    font-size: 14pt;
+    color: #c3c1c1;
+    font-family: 'Economica', sans-serif;
+}
+
+.paginamodpass .ui-footer .ui-btn-active,
+.paginanewuser .ui-footer .ui-btn-active,
+.paginamoduser .ui-footer .ui-btn-active,
+.paginaout .ui-footer .ui-btn-active,
+.paginamenu .ui-footer .ui-btn-active{
+    background: #d6264f;
+    color: #2b2b2b;
+    border-color: #2b2b2b;
+    text-shadow: #d6264f;
+}
+
+.menu{
+    margin-top: 80px;
+}
+
+.menu fieldset{
+    margin-top: 20px;
+    border-color: #d6264f;
+}
+
+.menu legend{
+    color: white;
+    font-size: 15pt;
+}
+
+.menu hr{
+    border: 2px solid #d6264f;
+}
+
+.menu .ui-btn{
+    height: 55px;
+    color: #c3c1c1;
+    font-size: 16pt;
+    font-family: 'Economica', sans-serif;
+}
+
+.categoria .ui-btn{
+    width: 100%;
+}
+
+/**PAGINA DI OUTPUT**/
+.out{
+    margin-top: 80px;
+}
+
+.out textarea{
+    font-size: 18pt;
+    border-style: none;
+    text-align: left;
+    color: white;
+    font-family: 'Economica', sans-serif;
+
+}
+
+.out .ui-state-disabled{
+    opacity:1;
+}
+
+#select-choice-1-button,
+.out .ui-btn{
+    color: #2b2b2b;
+    background: #d6264f;
+    border-color: #d6264f;
+    text-shadow: none;
+    height: 60px;
+    font-family: 'Economica', sans-serif;
+    font-size: 16pt;
+}
+
+.out .ui-corner-all{
+    border-radius: 0;
+}
+
+#select-choice-1-button{
+    padding-top: 18px;
+    padding-bottom: 0px;
+    height: 42px;
+}
+
+.modpass label,
+.newuser label,
+.moduser label{
+    font-size: 15pt;
+    margin-top: 20px;
+}
+
+.modpass label,
+.newuser label {
+    color: #d6264f;
+}
+
+
+/** RIMOZIONE OMBRE **/
+/*focus dei vari elementi*/
+.ui-page-theme-b .ui-btn:focus,
+html .ui-bar-b .ui-btn:focus,
+html .ui-body-b .ui-btn:focus,
+html body .ui-group-theme-b .ui-btn:focus,
+html head + body .ui-btn.ui-btn-b:focus,
+    /* Focus buttons and text inputs with div wrap */
+.ui-page-theme-b .ui-focus,
+html .ui-bar-b .ui-focus,
+html .ui-body-b .ui-focus,
+html body .ui-group-theme-b .ui-focus,
+html head + body .ui-btn-b.ui-focus,
+html head + body .ui-body-b.ui-focus {
+    -webkit-box-shadow: 0 0 0px 	#19763e /*{b-active-background-color}*/;
+    -moz-box-shadow: 0 0 0px 		#19763e /*{b-active-background-color}*/;
+    box-shadow: 0 0 0px 			#19763e /*{b-active-background-color}*/;
+}
+
