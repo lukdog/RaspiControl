@@ -27,13 +27,13 @@ if(!isset($_SESSION['usernameLogin'])){
     <meta name="msapplication-tap-highlight" content="no" />
     <!-- Stylesheet jquery e mio !-->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
-    <link rel="stylesheet" href="style/style.css" />
+    <link rel="stylesheet" href="Style/style.css" />
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
-    <link rel="shortcut icon" href="images/favicon.ico" >
-    <link rel="icon" href="images/icon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="images/icon.png" type="image/png" />
-    <link rel="mask-icon" color="#d6264f" href="images/iconP.svg">
+    <link rel="shortcut icon" href="Images/favicon.ico" >
+    <link rel="icon" href="Images/icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="Images/icon.png" type="image/png" />
+    <link rel="mask-icon" color="#d6264f" href="Images/iconP.svg">
 </head>
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
