@@ -11,16 +11,16 @@
 
 $page = $_POST['tools'];
 
-if($page == NULL)
+if ($page == NULL)
     header("location:../tools.php");
 
-if($page == "newuser")
+if ($page == "newuser")
     header("location:../newuserpage.php");
 
-if($page == "moduser")
+if ($page == "moduser")
     header("location:../moduserpage.php");
 
-if($page == "modpasswd")
+if ($page == "modpasswd")
     header("location:../modpasswdpage.php");
 
 //header("location:../tools.php");

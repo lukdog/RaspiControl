@@ -6,7 +6,7 @@
  * Time: 15:06
  */
 
-include_once "scripts/function.php";
+include_once "functions/functions.php";
 
 Logout();
 header("location:login.php");

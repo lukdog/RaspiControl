@@ -6,25 +6,30 @@
  * Time: 14:58
  */
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/ConnettiDB.php";
+include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/DBConnection.php";
 include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/Utente.php";
 
 //Funzione che crea il form
-function CreaForm(Utente $utente){
+function CreaForm(User $utente)
+{
     $nomeutente = $utente->getID();
     $categorie = ElencoCategorie();
     $db = ConnettiDB::getConnection();
-    if(count($categorie)==0){
+    if (count($categorie) == 0)
+    {
         echo "Nessuna Categoria Presente";
-    } else{
-        foreach($categorie as $temp){
+    } else
+    {
+        foreach ($categorie as $temp)
+        {
             echo "<fieldset data-role='controlgroup' data-corners='false'>";
             echo "<legend>" . $temp . "</legend>";
             echo "<hr>";
 
             $sql = "SELECT ID, NOME FROM SCRIPTS WHERE CATEGORIA = '$temp' AND ID IN (SELECT ID_SCRIPT FROM PERMESSI WHERE ID_UTENTE='$nomeutente')";
-            
-            foreach($db->query($sql) as $script){
+
+            foreach ($db->query($sql) as $script)
+            {
                 $nomescript = $script["NOME"];
                 $idscript = $script["ID"];
                 $riga = "<button type='submit' value='$idscript' name='script' class='ui-shadow ui-btn ui-corner-all ui-icon-home'>" . $nomescript . "</button>";
@@ -36,12 +41,14 @@ function CreaForm(Utente $utente){
 }
 
 //Funzione che crea un array contenente tutte le categorie
-function ElencoCategorie(){
+function ElencoCategorie()
+{
     $sql = "SELECT * FROM CATEGORIE";
     $db = ConnettiDB::getConnection();
     $count = 0;
     $categorie = NULL;
-    foreach($db->query($sql) as $tmp){
+    foreach ($db->query($sql) as $tmp)
+    {
         $categorie[$count] = $tmp['CATEGORIA'];
         $count++;
     }
@@ -49,15 +56,17 @@ function ElencoCategorie(){
 }
 
 //Funzione che effettua il logout
-function Logout(){
+function Logout()
+{
     $_SESSION = array();
     session_unset();
     session_destroy();
 }
 
 //Funzione che inserisce un nuovo utente
-function addUser($username, $password){
-    $usr = new Utente();
+function addUser($username, $password)
+{
+    $usr = new User();
     $usr->SetID($username);
     $usr->SetPassword($password);
     $usr->SetAttivo(TRUE);
@@ -67,39 +76,43 @@ function addUser($username, $password){
 }
 
 //Funzione che modifica un utente già esistente
-function modUser($username, $password=NULL, $attivo=NULL, $admin=NULL){
-    $usr = new Utente($username);
+function modUser($username, $password = NULL, $attivo = NULL, $admin = NULL)
+{
+    $usr = new User($username);
     //echo $admin;
-    if($usr->GetID() == NULL)
+    if ($usr->GetID() == NULL)
     {
         echo "Utente Non esistente";
         return FALSE;
     }
 
-    if($password != NULL)
+    if ($password != NULL)
         $usr->SetPassword($password);
 
-    if($attivo != NULL)
+    if ($attivo != NULL)
         $usr->SetAttivo($attivo);
 
-    if($admin != NULL)
+    if ($admin != NULL)
         $usr->SetAdmin($admin);
 
-    if($password != NULL or $attivo != NULL or $admin != NULL){
+    if ($password != NULL or $attivo != NULL or $admin != NULL)
+    {
         $ctrl = $usr->Save();
         return $ctrl;
     }
     return FALSE;
 }
 
-function userSelect(){
+function userSelect()
+{
     $sql = "SELECT ID FROM UTENTI";
     $db = ConnettiDB::getConnection();
 
     echo "<label for='select-choice-1'>Scegli Utente:</label>";
     echo "<select class='scegliUser' name='username' id='select-choice-1'>";
 
-    foreach($db->query($sql) as $tmp){
+    foreach ($db->query($sql) as $tmp)
+    {
         $nome = $tmp["ID"];
         echo "<option value='$nome'>$nome</option>";
     }

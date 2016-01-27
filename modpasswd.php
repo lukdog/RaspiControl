@@ -5,15 +5,15 @@
  * Date: 11/03/15
  * Time: 11:09
  */
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/scripts/function.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/Utente.php";
+include_once dirname(__FILE__) . "/functions/functions.php";
+include_once dirname(__FILE__) . "/classes/Utente.php";
 session_start();
 
 if(!isset($_SESSION['usernameLogin'])){
     echo "Sessione non registrata";
     header("location:login.php");
 } else{
-    $utente = new Utente($_SESSION['usernameLogin']);
+    $utente = new User($_SESSION['usernameLogin']);
 }
 
 $pass = $_POST['password'];
@@ -39,13 +39,13 @@ if($pass != $pass2){
     <meta name="msapplication-tap-highlight" content="no" />
     <!-- Stylesheet jquery e mio !-->
     <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
-    <link rel="stylesheet" href="Style/style.css" />
+    <link rel="stylesheet" href="style/style.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
-    <link rel="shortcut icon" href="Images/favicon.ico" >
-    <link rel="icon" href="Images/icon.png" type="image/png" />
-    <link rel="apple-touch-icon" href="Images/icon.png" type="image/png" />
-    <link rel="mask-icon" color="#d6264f" href="Images/iconP.svg">
+    <link rel="shortcut icon" href="style/images/favicon.ico">
+    <link rel="icon" href="style/images/icon.png" type="image/png"/>
+    <link rel="apple-touch-icon" href="style/images/icon.png" type="image/png"/>
+    <link rel="mask-icon" color="#d6264f" href="style/images/iconP.svg">
 </head>
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
