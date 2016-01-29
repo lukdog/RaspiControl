@@ -6,8 +6,8 @@
  * Time: 14:58
  */
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/DBConnection.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/Utente.php";
+include_once dirname(__FILE__) . "../classes/DBConnection.php";
+include_once dirname(__FILE__) . "../classes/User.php";
 
 //Funzione che crea il form
 function CreaForm(User $utente)

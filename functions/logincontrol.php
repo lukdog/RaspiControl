@@ -6,8 +6,8 @@
  * Time: 15:09
  */
 
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/Utente.php";
-include_once $_SERVER['DOCUMENT_ROOT'] . "/control/classes/Access.php";
+include_once dirname(__FILE__) . "../classes/User.php";
+include_once dirname(__FILE__) . "../classes/Access.php";
 session_start();
 
 $user = $_POST['username'];
@@ -20,7 +20,7 @@ $ctrl = login($user, $pass);
 if ($ctrl)
 {
     //Se l'accesso è effettuato correttamente allora creo nuova sessione...
-    $accesso = new Accesso($user);
+    $accesso = new Access($user);
     $_SESSION['usernameLogin'] = $user;
     header("location:../index.php");
 } else
