@@ -6,19 +6,18 @@
  * Time: 12:00
  */
 session_start();
-include_once dirname(__FILE__) . "/classes/Utente.php";
+include_once dirname(__FILE__) . "/classes/User.php";
 include_once dirname(__FILE__) . "/classes/Script.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 
 //Controllo che la sessione sia registrata e recupero l'utente che ha fatto il LOGIN
-if(!isset($_SESSION['usernameLogin'])){
+if (!isset($_SESSION['USERNAME']))
+{
     echo "Sessione non registrata";
     header("location:login.php");
 } else{
+    //TODO check of time session
     $utente = new User($_SESSION['usernameLogin']);
-    echo $utente->GetID();
-    if($utente->IsAdmin())
-        echo "ADMIN";
 }
 
     ?>

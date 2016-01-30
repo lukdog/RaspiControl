@@ -28,7 +28,7 @@ class DBConnection
                 self::$user, self::$pass);
         } catch (PDOException $e)
         {
-            echo $e->getMessage();
+            throw new Exception("Impossible to establish connection to DB");
         }
 
     }

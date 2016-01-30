@@ -10,11 +10,12 @@ include_once "./classes/Script.php";
 include_once "./functions/functions.php";
 session_start();
 
-if(!isset($_SESSION['usernameLogin'])){
+if (!isset($_SESSION['USERNAME']))
+{
     echo "Sessione non registrata";
     header("location:login.php");
 } else{
-    $utente = new User($_SESSION['usernameLogin']);
+    $utente = new User($_SESSION['USERNAME']);
     if(!$utente->IsAdmin()){
         echo "Non hai privilegi di Admin";
         header("location:index.php");

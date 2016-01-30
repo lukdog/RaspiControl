@@ -6,7 +6,7 @@
  * Time: 15:06
  */
 
-include_once "functions/functions.php";
+include_once dirname(__FILE__) . "/functions/functions.php";
 
 Logout();
 header("location:login.php");

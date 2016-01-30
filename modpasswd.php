@@ -9,11 +9,12 @@ include_once dirname(__FILE__) . "/functions/functions.php";
 include_once dirname(__FILE__) . "/classes/Utente.php";
 session_start();
 
-if(!isset($_SESSION['usernameLogin'])){
+if (!isset($_SESSION['USERNAME']))
+{
     echo "Sessione non registrata";
     header("location:login.php");
 } else{
-    $utente = new User($_SESSION['usernameLogin']);
+    $utente = new User($_SESSION['USERNAME']);
 }
 
 $pass = $_POST['password'];

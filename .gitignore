@@ -3,3 +3,5 @@
 classes/.DS_Store
 images/.DS_Store
 scripts/.DS_Store
+.idea/codeStyleSettings.xml
+./classes/DBConnection.php

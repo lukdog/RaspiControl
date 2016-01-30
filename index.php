@@ -6,15 +6,31 @@
  * Time: 16:37
  */
 session_start();
-include_once dirname(__FILE__) . "/classes/Utente.php";
+include_once dirname(__FILE__) . "/classes/User.php";
 include_once dirname(__FILE__) . "/classes/Script.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 
 //Controllo che la sessione sia registrata e recupero l'utente che ha fatto il LOGIN
-if(!isset($_SESSION['usernameLogin'])){
+if (!isset($_SESSION['USERNAME']))
+{
     header("location:login.php");
-} else{
-    $utente = new User($_SESSION['usernameLogin']);
+}
+if (isset($_GET['LOGOUT']))
+{
+    //Distruggo la Sessione
+    $_SESSION = array();
+    if (ini_get("session.use_cookies"))
+    {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 3600 * 24, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+    }
+    session_destroy();
+    redirect("login.php", 301);
+} else
+{
+    //TODO control of session duration
+    $utente = new User($_SESSION['USERNAME']);
+
 }
 
 ?>
@@ -22,11 +38,12 @@ if(!isset($_SESSION['usernameLogin'])){
 <html>
 <head>
     <title>raspiControl</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-    <meta name="msapplication-tap-highlight" content="no" />
+    <meta charset="utf-8"/>
+    <meta name="viewport"
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
+    <meta name="msapplication-tap-highlight" content="no"/>
     <!-- Stylesheet jquery e mio !-->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css"/>
     <link rel="stylesheet" href="style/style.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
@@ -57,7 +74,7 @@ if(!isset($_SESSION['usernameLogin'])){
                     <a href="tools.php">Tools</a>
                 </li>
                 <li>
-                    <a href="logout.php">Logout</a>
+                    <a href="index.php?LOGOUT">Logout</a>
                 </li>
             </ul>
         </div>

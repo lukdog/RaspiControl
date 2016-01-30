@@ -13,11 +13,11 @@ class Script
 {
 
     private $id = NULL;
-    private $nome = NULL;
-    private $testo = NULL;
-    private $categoria = NULL;
-    private $nuovo = FALSE;
-    private $modificato = FALSE;
+    private $name = NULL;
+    private $cmd = NULL;
+    private $category = NULL;
+    private $new = FALSE;
+    private $modified = FALSE;
     private $sourceTab = "SCRIPTS";
     private $db = NULL;
 
@@ -27,21 +27,32 @@ class Script
      */
     public function __construct($id = NULL)
     {
-
+        $this->db = DBConnection::getConnection();
         if ($id == NULL)
         {
-            $nuovo = TRUE;
+            $this->new = TRUE;
         } else
         {
-            $this->db = DBConnection::getConnection();
-            $sql = "SELECT * FROM $this->sourceTab WHERE ID=$id";
+            $id = $this->db->quote($id);
+            $query = "SELECT * FROM $this->sourceTab WHERE ID=$id";
 
-            foreach ($this->db->query($sql) as $temp)
+            try
             {
-                $this->id = $temp['ID'];
-                $this->nome = $temp['NOME'];
-                $this->testo = $temp['TESTO'];
-                $this->categoria = $temp['CATEGORIA'];
+                $res = $this->db->query($query);
+                if ($res->rowCount() != 1)
+                    throw new Exception("Script " . $id . " do not exists in DB");
+                else
+                {
+                    $info = $res->fetch(PDO::FETCH_ASSOC);
+                    $this->id = $info['ID'];
+                    $this->name = $info["NAME"];
+                    $this->cmd = $info["CMD"];
+                    $this->category = $info["CATEGORY"];
+
+                }
+            } catch (Exception $e)
+            {
+                throw new Exception("Impossible to Execute Query that retrieve a script " . $e->getMessage());
             }
         }
 
@@ -56,105 +67,98 @@ class Script
         return $this->id;
     }
 
-    public function GetNome()
+    public function GetName()
     {
-        return $this->nome;
+        return $this->name;
     }
 
-    public function GetTesto()
+    public function GetCmd()
     {
-        return $this->testo;
+        return $this->cmd;
     }
 
-    public function GetCategoria()
+    public function GetCategory()
     {
-        return $this->categoria;
+        return $this->category;
     }
 
-    /*Metodi di Set per settare i valori di uno script nuovo*/
-    public function SetNome($nome)
+    public function SetName($name)
     {
-        $this->nome = $nome;
-        $this->modificato = TRUE;
+        $this->name = $name;
+        $this->modified = TRUE;
     }
 
-    public function SetTesto($testo)
+    public function SetCmd($cmd)
     {
-        $this->testo = $testo;
-        $this->modificato = TRUE;
+        $this->cmd = $cmd;
+        $this->modified = TRUE;
     }
 
-    public function SetCategoria($categoria)
+    public function SetCategory($category)
     {
-        $this->categoria = $categoria;
-        $this->modificato = TRUE;
+        $this->category = $category;
+        $this->modified = TRUE;
     }
 
-    public function SetAll($nome, $testo, $categoria)
+    public function SetAll($name, $cmd, $category)
     {
-        $this->nome = $nome;
-        $this->testo = $testo;
-        $this->categoria = $categoria;
-        $this->modificato = TRUE;
+        $this->name = $name;
+        $this->cmd = $cmd;
+        $this->category = $category;
+        $this->modified = TRUE;
     }
 
-    //Metodo per Eseguire lo script sul Server
-    public function Esegui()
+    public function Exec()
     {
-        $output = shell_exec($this->testo);
+        $output = shell_exec($this->cmd);
         return $output;
     }
 
-    //Metodo per Salvare uno Script modificato o Creato
-    public function Salva()
+    public function Save()
     {
-        if ($this->nuovo)
+        if ($this->new)
         {
-            $this->db = DBConnection::getConnection();
-            $this->db->beginTransaction();
-            if ($this->nome == NULL or $this->testo == NULL or $this->categoria == NULL)
+
+            if ($this->name == NULL or $this->cmd == NULL or $this->category == NULL)
             {
-                echo "WARNING: utilizzare metodi SET";
-                return FALSE;
+                throw new Exception("Some fields are not set");
             }
             try
             {
-                $sql = $this->db->prepare("INSERT INTO $this->SourceTab(NOME, TESTO, CATEGORIA) VALUES(?,?,?)");
-                $sql->execute(array($this->nome, $this->testo, $this->categoria));
+                $this->db->beginTransaction();
+                $sql = $this->db->prepare("INSERT INTO $this->SourceTab(NAME, CMD, CATEGORY) VALUES(?,?,?)");
+                $sql->execute(array($this->name, $this->cmd, $this->category));
                 $this->db->commit();
-                $this->nuovo = FALSE;
-                $this->modificato = FALSE;
+                $this->new = FALSE;
+                $this->modified = FALSE;
                 return TRUE;
             } catch (Exception $e)
             {
-                echo $e->getMessage();
                 $this->db->rollback();
-                return FALSE;
+                throw new Exception("Impossible to securely save script " . $this->name);
             }
         } else
         {
-            if ($this->modificato)
+            if ($this->modified)
             {
-                $this->db = DBConnection::getConnection();
-                $this->db->beginTransaction();
-                if ($this->nome == NULL or $this->testo == NULL or $this->categoria == NULL)
+
+                if ($this->name == NULL or $this->cmd == NULL or $this->category == NULL)
                 {
-                    echo "WARNING: utilizzare metodi SET";
-                    return FALSE;
+                    throw new Exception("Some fields are not set");
                 }
                 try
                 {
-                    $upd = "UPDATE $this->sourceTab SET NOME=?, TESTO=?, CATEGORIA=? WHERE ID=?";
+                    $this->db->beginTransaction();
+                    $upd = "UPDATE $this->sourceTab SET NAME=?, CMD=?, CATEGORY=? WHERE ID=?";
                     $sql = $this->db->prepare($upd);
-                    $sql->execute(array($this->nome, $this->testo, $this->categoria, $this->id));
+                    $sql->execute(array($this->name, $this->cmd, $this->category, $this->id));
                     $this->db->commit();
-                    $this->modificato = FALSE;
+                    $this->modified = FALSE;
                     return TRUE;
                 } catch (Exception $e)
                 {
-                    echo $e->getMessage();
                     $this->db->rollback();
-                    return FALSE;
+                    throw new Exception("Impossible to securely save script " . $this->name);
                 }
             }
         }

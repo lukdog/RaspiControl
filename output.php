@@ -9,7 +9,8 @@
 include_once dirname(__FILE__) . "/classes/Script.php";
 session_start();
 
-if(!isset($_SESSION['usernameLogin'])){
+if (!isset($_SESSION['USERNAME']))
+{
     header('location:login.php');
 }
 
