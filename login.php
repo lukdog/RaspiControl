@@ -42,8 +42,8 @@ if (isset ($_SESSION['USERNAME']))
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
     <meta name="msapplication-tap-highlight" content="no"/>
     <!--Jquery Mobile Online !-->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css"/>
-    <link rel="stylesheet" href="style/style.css"/>
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css"/>-->
+    <link rel="stylesheet" href="style/styles.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="style/images/favicon.ico">
@@ -53,25 +53,29 @@ if (isset ($_SESSION['USERNAME']))
 </head>
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-<div class="pagina" data-role="page" data-theme="b">
-    <div data-role="main" id="loginContent" class="ui-content">
+<div class="pagina login">
 
-        <form class="login" action="login.php" method="POST" data-ajax="false">
-            <div class="logo"></div>
-            <input data-theme="b" id="username" data-corners="false" type="text" name="USERLOGIN" value=""
-                   placeholder="Username"/>
-            <input data-theme="b" data-corners="false" type="password" name="PASSWDLOGIN" value=""
-                   placeholder="Password"/>
-            <button class="ui-btn-login ui-btn " type="submit">
-                LOGIN
-            </button>
+    <form class="login" action="login.php" method="POST" data-ajax="false" id="login_Form">
+        <p class="logo"></p>
 
+        <?php if (isset($error))
+        {
+            echo "<p class='error'>" . $error . "</p>";
+        }
+        ?>
+        <p class="input">
+            <input id="username" data-corners="false" type="text" name="USERLOGIN" value=""
+                   placeholder="Username" onkeypress="return submitOnEnter(event, 'login_Form')"/>
+            <input data-corners="false" type="password" name="PASSWDLOGIN" value=""
+                   placeholder="Password" onkeypress="return submitOnEnter(event, 'login_Form')"/>
+        </p>
+        <p class="input button" id="login" onclick="submitForm(this)">LOGIN</p>
+    </form>
 
-        </form>
-    </div>
 </div>
 
-<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+<script src="scripts/jquery.js"></script>
+<script src="scripts/function.js"></script>
+<!--<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>-->
 </body>
 </html>

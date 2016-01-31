@@ -14,7 +14,7 @@ if (!isset($_SESSION['USERNAME']))
     header('location:login.php');
 }
 
-$id = $_POST['script'];
+$id = $_GET['SCRIPTID'];
 
 $s = new Script($id);
 $out = $s->Esegui();

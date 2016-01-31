@@ -10,14 +10,12 @@ include_once dirname(__FILE__) . "/classes/User.php";
 include_once dirname(__FILE__) . "/classes/Script.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 
-//Controllo che la sessione sia registrata e recupero l'utente che ha fatto il LOGIN
 if (!isset($_SESSION['USERNAME']))
 {
     header("location:login.php");
 }
 if (isset($_GET['LOGOUT']))
 {
-    //Distruggo la Sessione
     $_SESSION = array();
     if (ini_get("session.use_cookies"))
     {
@@ -26,6 +24,7 @@ if (isset($_GET['LOGOUT']))
     }
     session_destroy();
     redirect("login.php", 301);
+    exit;
 } else
 {
     //TODO control of session duration
@@ -43,8 +42,8 @@ if (isset($_GET['LOGOUT']))
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
     <meta name="msapplication-tap-highlight" content="no"/>
     <!-- Stylesheet jquery e mio !-->
-    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css"/>
-    <link rel="stylesheet" href="style/style.css"/>
+    <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css"/> -->
+    <link rel="stylesheet" href="style/styles.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="style/images/favicon.ico">
@@ -53,35 +52,59 @@ if (isset($_GET['LOGOUT']))
     <link rel="mask-icon" color="#d6264f" href="style/images/iconP.svg">
 </head>
 
-<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-<div class="pagina paginamenu" data-role="page" data-theme="b">
+<body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" onresize="setFooterWidth()"
+      onload="setFooterWidth()">
+<div class="pagina index">
 
-    <div data-role="header">
-        <h1>Control</h1>
-    </div>
+    <header>
+        RaspiControl
+    </header>
 
-    <div data-role="main" id="loginContent" class="ui-content">
-        <form class="menu" action="output.php" method="POST" data-ajax="false">
+    <section class="mainMenu">
 
-            <?php CreaForm($utente); ?>
+        <?php
+        try
+        {
+            CreaForm($utente);
+        } catch (Exception $e)
+        {
+            echo "<p class='error'>" . $e->getMessage() . "</p>";
+        }
 
-        </form>
-    </div>
-    <div data-role="footer">
-        <div data-role="navbar">
-            <ul>
-                <li>
-                    <a href="tools.php">Tools</a>
+
+        ?>
+
+        <p class="category" id="General_btn" onclick="showPanel(this)">
+            General
+        </p>
+        <ul class="scripts" id="General_Panel">
+            <li id="1" about="vuoi davvero spegnere il raspberry?" onclick="execCmd(this)">Spegni</li>
+            <li>Riavvia</li>
+            <li>Prova</li>
+        </ul>
+        <p class="category">
+            Storage
+        </p>
+        <p class="category">
+            Network
+        </p>
+
+    </section>
+    <footer>
+
+        <ul>
+            <li class="footerTab">
+                <a href="tools.php">TOOLS</a>
                 </li>
-                <li>
-                    <a href="index.php?LOGOUT">Logout</a>
+            <li class="footerTab">
+                <a href="index.php?LOGOUT">LOGOUT</a>
                 </li>
             </ul>
-        </div>
-    </div>
+
+    </footer>
 </div>
 
-<script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+<script src="scripts/jquery.js"></script>
+<script src="scripts/function.js"></script>
 </body>
 </html>
