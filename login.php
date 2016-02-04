@@ -51,7 +51,7 @@ if (isset ($_SESSION['USERNAME']))
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="style/images/favicon.ico">
     <link rel="icon" href="style/images/icon.png" type="image/png"/>
-    <link rel="apple-touch-icon" href="style/images/icon.png" type="image/png"/>
+    <link rel="apple-touch-icon" href="style/images/apple.png" type="image/png"/>
     <link rel="mask-icon" color="#d6264f" href="style/images/iconP.svg">
 </head>
 
@@ -77,7 +77,7 @@ if (isset ($_SESSION['USERNAME']))
 
 </div>
 
-<script src="scripts/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script src="scripts/function.js"></script>
 <!--<script src="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>-->
 </body>
