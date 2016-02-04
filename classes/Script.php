@@ -1,7 +1,7 @@
 <?php
 
 include_once dirname(__FILE__) . "/DBConnection.php";
-
+include_once dirname(__FILE__) . "/User.php";
 
 /*
  * Class Script
@@ -16,6 +16,7 @@ class Script
     private $name = NULL;
     private $cmd = NULL;
     private $category = NULL;
+    private $alert = NULL;
     private $new = FALSE;
     private $modified = FALSE;
     private $sourceTab = "SCRIPTS";
@@ -48,6 +49,7 @@ class Script
                     $this->name = $info["NAME"];
                     $this->cmd = $info["CMD"];
                     $this->category = $info["CATEGORY"];
+                    $this->alert = $info["ALERT"];
 
                 }
             } catch (Exception $e)
@@ -82,6 +84,11 @@ class Script
         return $this->category;
     }
 
+    public function GetAlert()
+    {
+        return $this->alert;
+    }
+
     public function SetName($name)
     {
         $this->name = $name;
@@ -108,10 +115,36 @@ class Script
         $this->modified = TRUE;
     }
 
-    public function Exec()
+    public function Exec(User $user)
     {
-        $output = shell_exec($this->cmd);
-        return $output;
+
+        $idu = $this->db->quote($user->GetID());
+        $ids = $this->db->quote($this->id);
+        $sql = "SELECT ID_USER FROM AUTHORIZATIONS WHERE ID_USER=$idu AND ID_SCRIPT=$ids";
+        $res = NULL;
+        try
+        {
+            $res = $this->db->query($sql);
+        } catch (Exception $e)
+        {
+            throw new Exception("Impossible to execute command, retry later");
+        }
+
+        if ($res->rowCount() == 1)
+        {
+            try
+            {
+                //TODO Manage errors or no Output
+                $output = shell_exec($this->cmd);
+                return $output;
+            } catch (Exception $e)
+            {
+                throw new Exception("It's not possible to execute command, retry later");
+            }
+        } else
+        {
+            throw new Exception("You don't have permission to execute this command");
+        }
     }
 
     public function Save()

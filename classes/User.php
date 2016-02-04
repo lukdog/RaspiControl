@@ -58,24 +58,9 @@ class User
         }
     }
 
-    public function SetID($id)
-    {
-        if (strlen($id) > 20)
-            throw new Exception("Error: username can be at least of 20 chars");
-        $this->id = $id;
-        $this->modified = TRUE;
-    }
-
-    public function SetPassword($password)
-    {
-        //TODO better way to store password
-        $this->password = md5($password);
-        $this->modified = TRUE;
-    }
-
     public function SetValid($at)
     {
-        if ($at == "TRUE")
+        if ($at == TRUE)
             $this->valid = 1;
         else
             $this->valid = 0;
@@ -84,17 +69,24 @@ class User
 
     public function SetAdmin($ad)
     {
-        if ($ad == "TRUE")
+        if ($ad == true)
             $this->admin = 1;
         else
             $this->admin = 0;
         $this->modified = TRUE;
-        echo $this->admin;
     }
 
     public function GetID()
     {
         return $this->id;
+    }
+
+    public function SetID($id)
+    {
+        if (strlen($id) > 20)
+            throw new Exception("Error: username can be at least of 20 chars");
+        $this->id = $id;
+        $this->modified = TRUE;
     }
 
     public function IsValid()
@@ -122,6 +114,25 @@ class User
             return FALSE;
     }
 
+    public function ChangePassword($new, $newR)
+    {
+        if ($new != $newR)
+        {
+            throw new Exception("Two passwords are not equal");
+        }
+
+        $this->SetPassword($new);
+        $this->Save();
+
+    }
+
+    public function SetPassword($password)
+    {
+        //TODO better way to store password
+        $this->password = md5($password);
+        $this->modified = TRUE;
+    }
+
     public function Save()
     {
 
@@ -140,11 +151,11 @@ class User
 
         } else if ($this->new)
         {
-            if ($this->id == NULL or $this->password == NULL or $this->valid == NULL)
+            if ($this->id == NULL or $this->password == NULL or $this->valid == NULL or $this->admin == NULL)
             {
                 throw new Exception("Some user's attribute are not specified");
             }
-            $query = "INSERT INTO $this->sourceTab(ID, PASSWORD, VALID) VALUES(?, ?, ?)";
+            $query = "INSERT INTO $this->sourceTab(ID, PASSWORD, VALID, ADMIN) VALUES(?, ?, ?, ?)";
             try
             {
                 $sql = $this->db->prepare($query);
@@ -152,7 +163,7 @@ class User
             {
                 throw new Exception("Impossible to insert " . $this->id . " user");
             }
-            $data = array($this->id, $this->password, $this->valid);
+            $data = array($this->id, $this->password, $this->valid, $this->admin);
         } else return FALSE;
 
         try
@@ -163,13 +174,32 @@ class User
             throw new Exception("Impossible to securely manage users table");
         }
 
+        if ($this->new)
+        {
+            try
+            {
+                $newid = $this->db->quote($this->id);
+                $query = "SELECT ID FROM $this->sourceTab WHERE ID=$newid FOR UPDATE";
+                $res = $this->db->query($query);
+                if ($res->rowCount() != 0)
+                    throw new Exception();
+            } catch (Exception $e)
+            {
+                $this->db->rollBack();
+                throw new Exception("Username is not valid, it's already in use");
+            }
+        }
+
+
         try
         {
-            $sql->execute($data);
-            $this->db->commit();
-            $this->new = FALSE;
-            $this->modified = FALSE;
-            return TRUE;
+            if ($sql->execute($data))
+            {
+                $this->db->commit();
+                $this->new = FALSE;
+                $this->modified = FALSE;
+                return TRUE;
+            } else throw new Exception();
         } catch (Exception $e)
         {
             $this->db->rollBack();

@@ -31,6 +31,9 @@ if (isset ($_SESSION['USERNAME']))
     {
         $error = $e->getMessage();
     }
+} else if (isset($_GET['EXPIRED']))
+{
+    $error = "Session expired";
 }
 ?>
 
@@ -43,7 +46,7 @@ if (isset ($_SESSION['USERNAME']))
     <meta name="msapplication-tap-highlight" content="no"/>
     <!--Jquery Mobile Online !-->
     <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css"/>-->
-    <link rel="stylesheet" href="style/styles.css"/>
+    <link rel="stylesheet" href="style/style.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="style/images/favicon.ico">
@@ -53,7 +56,7 @@ if (isset ($_SESSION['USERNAME']))
 </head>
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
-<div class="pagina login">
+<div class="page login">
 
     <form class="login" action="login.php" method="POST" data-ajax="false" id="login_Form">
         <p class="logo"></p>

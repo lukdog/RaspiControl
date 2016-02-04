@@ -36,10 +36,45 @@ function showPanel(butt) {
 
 function execCmd(butt) {
     var about = butt.getAttribute("about");
-
+    if (about == "") {
+        about = "Are you sure to execute this script?";
+    }
     if (confirm(about)) {
-        var req = "output.php?SCRIPTID=" + butt.id;
-        window.location.href = req;
+        window.location.href = "output.php?SCRIPTID=" + butt.id;
     }
 
+}
+
+function showTools(butt) {
+    var mainMenu = $(".mainSection");
+    var toolsMenu = $(".toolsMenu");
+    if (mainMenu.css("display") == "block") {
+        mainMenu.slideToggle("slow");
+        toolsMenu.slideToggle("normal");
+        butt.style.background = "#2b2b2b";
+        butt.style.color = "white";
+    } else {
+        mainMenu.slideToggle("normal");
+        toolsMenu.slideToggle("slow");
+        butt.style.background = "#d6264f";
+        butt.style.color = "#2b2b2b";
+    }
+}
+
+function selectBtn(butt) {
+    if (butt.className == "off") {
+        butt.className = "on";
+        butt.innerHTML = "YES";
+    } else {
+        butt.className = "off";
+        butt.innerHTML = "NO";
+    }
+}
+
+function setSelectValue(butt) {
+    var selected = butt.getAttribute("about");
+    var l = selected.length;
+    $("li.select > input").val(selected);
+    $("li.select > input").width(l * 9);
+    $("ul.list").slideToggle("normal");
 }
