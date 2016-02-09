@@ -61,7 +61,7 @@ function buildMenu(User $user)
         foreach ($categories as $catName)
         {
 
-            $id = $catName . "_btn";
+            $id = str_replace(" ", "", $catName) . "_btn";
             echo "<p class='category' id='$id' onclick='showPanel(this)'>" . $catName . "</p>";
 
             $query = "SELECT ID, NAME, ALERT FROM SCRIPTS WHERE CATEGORY = '$catName' AND ID IN (SELECT ID_SCRIPT FROM AUTHORIZATIONS WHERE ID_USER='$username')";
@@ -69,7 +69,7 @@ function buildMenu(User $user)
             try
             {
                 $res = $db->query($query);
-                $namePanel = $catName . "_Panel";
+                $namePanel = str_replace(" ", "", $catName) . "_Panel";
                 if ($res->rowCount() <= 0)
                 {
                     echo "<ul class=\"scripts\" id=\"$namePanel\">";

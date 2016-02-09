@@ -94,8 +94,8 @@ form.login {
 
 form.login > p.logo {
     margin: 0 auto;
-    width: 128px;
-    height: 163px;
+    width: 200px;
+    height: 200px;
     border-color: #2b2b2b;
     background: url('images/logorasp.png');
 }

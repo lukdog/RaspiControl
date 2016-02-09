@@ -60,13 +60,17 @@ if (!isset($_SESSION['USERNAME']))
     <meta name="viewport"
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
     <meta name="msapplication-tap-highlight" content="no"/>
+    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Stylesheet-->
     <link rel="stylesheet" href="style/style.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
     <link rel="shortcut icon" href="style/images/favicon.ico">
-    <link rel="icon" href="style/images/icon.png" type="image/png"/>
-    <link rel="apple-touch-icon" href="style/images/apple.png" type="image/png"/>
+    <link rel="icon" sizes="128x128" href="style/images/android.png" type="image/png"/>
+    <link rel="icon" sizes="192x192" href="style/images/android-hd.png" type="image/png"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="style/images/apple-iphone.png" type="image/png"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="style/images/apple-ipad.png" type="image/png"/>
     <link rel="mask-icon" color="#d6264f" href="style/images/iconP.svg">
 </head>
 
