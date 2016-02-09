@@ -69,6 +69,7 @@ div.page > footer > ul > li > a {
     overflow-y: scroll;
 }
 
+.info,
 .message,
 .error {
     color: white;
@@ -83,6 +84,12 @@ div.page > footer > ul > li > a {
     background: green;
 }
 
+.info {
+    color: #d6264f;
+    background: none
+}
+
+form.configure,
 form.moduser,
 form.adduser,
 form.passwd,
@@ -92,6 +99,7 @@ form.login {
     margin: 20px auto 5px auto;
 }
 
+form.configure > p.logo,
 form.login > p.logo {
     margin: 0 auto;
     width: 200px;
@@ -100,6 +108,7 @@ form.login > p.logo {
     background: url('images/logorasp.png');
 }
 
+form.configure > p.input,
 form.moduser > p.input,
 form.adduser > p.input,
 form.passwd > p.input,
@@ -107,6 +116,7 @@ form.login > p.input {
     padding-top: 0;
 }
 
+form.configure > p.input > input,
 form.adduser > p.input > input,
 form.passwd > p.input > input,
 form.login > p.input > input {
@@ -126,6 +136,7 @@ form.login > p.input > input {
 }
 
 section.out > p.button,
+form.configure > p.button,
 form.moduser > p.button,
 form.adduser > p.button,
 form.passwd > p.button,
@@ -142,6 +153,7 @@ form.login > p.button {
     margin-bottom: 2px;
 }
 
+form.configure > p.input > label,
 form.adduser > p.input > label,
 form.passwd > p.input > label {
     line-height: 40px;
@@ -150,6 +162,7 @@ form.passwd > p.input > label {
     font-weight: bold;
 }
 
+form.configure > p.input > input,
 form.adduser > p.input > input,
 form.passwd > p.input > input {
     margin-top: 5px;

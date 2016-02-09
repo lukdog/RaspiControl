@@ -9,14 +9,12 @@
  * in this way there is only one connection to used DB
  */
 
+include_once dirname(__FILE__) . "/Application.php";
+
 //TODO: possibility to use sqlite and not mysql
 class DBConnection
 {
 
-    private static $user = "";
-    private static $pass = "";
-    private static $DBname = "";
-    private static $host = "";
     private static $connection = NULL;
 
     final private function __construct()
@@ -24,8 +22,10 @@ class DBConnection
 
         try
         {
-            self::$connection = new PDO("mysql:host=" . self::$host . ";dbname=" . self::$DBname,
-                self::$user, self::$pass);
+            $a = Application::getAppInfo();
+
+            self::$connection = new PDO("mysql:host=" . $a->GetDBHost() . ";dbname=" . $a->GetDBName(),
+                $a->GetDBUser(), $a->GetDBPass());
         } catch (PDOException $e)
         {
             throw new Exception("Impossible to establish connection to DB");

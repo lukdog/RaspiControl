@@ -7,39 +7,55 @@
  */
 session_start();
 include_once dirname(__FILE__) . "/functions/functions.php";
+include_once dirname(__FILE__) . "/classes/Application.php";
 
-if (isset ($_SESSION['USERNAME']))
+$application = NULL;
+try
 {
-    //Redirection to Index
-    //TODO control time of session
-    redirect("index.php", 302);
-    exit;
-
-} else if (isset($_POST['USERLOGIN']) && isset($_POST['PASSWDLOGIN']))
-{
-    try
+    $application = Application::getAppInfo();
+    if (!$application->IsConfigured())
     {
-        if (checklogin($_POST['USERLOGIN'], $_POST['PASSWDLOGIN']))
+        redirect("configure.php", 301);
+        exit;
+
+    } else if (isset ($_SESSION['USERNAME']))
+    {
+        //Redirection to Index
+        //TODO control time of session
+        redirect("index.php", 302);
+        exit;
+
+    } else if (isset($_POST['USERLOGIN']) && isset($_POST['PASSWDLOGIN']))
+    {
+        try
         {
-            //Build of session and redirect to index
-            $_SESSION['USERNAME'] = strtolower(trim($_POST['USERLOGIN']));
-            $_SESSION['LSTTIME'] = time();
-            redirect("index.php", 302);
-            exit;
+            if (checklogin($_POST['USERLOGIN'], $_POST['PASSWDLOGIN']))
+            {
+                //Build of session and redirect to index
+                $_SESSION['USERNAME'] = strtolower(trim($_POST['USERLOGIN']));
+                $_SESSION['LSTTIME'] = time();
+                redirect("index.php", 302);
+                exit;
+            }
+        } catch (Exception $e)
+        {
+            $error = $e->getMessage();
         }
-    } catch (Exception $e)
+    } else if (isset($_GET['EXPIRED']))
     {
-        $error = $e->getMessage();
+        $error = "Session expired";
     }
-} else if (isset($_GET['EXPIRED']))
+} catch (Exception $e)
 {
-    $error = "Session expired";
+    $fatalerror = $e->getMessage();
 }
+
+
 ?>
 
 <html>
 <head>
-    <title>raspicontrol</title>
+    <title>RaspiControl</title>
     <meta charset="utf-8"/>
     <meta name="viewport"
           content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"/>
@@ -65,18 +81,27 @@ if (isset ($_SESSION['USERNAME']))
     <form class="login" action="login.php" method="POST" data-ajax="false" id="login_Form">
         <p class="logo"></p>
 
-        <?php if (isset($error))
+        <?php
+
+        if (isset($fatalerror))
         {
-            echo "<p class='error'>" . $error . "</p>";
-        }
-        ?>
-        <p class="input">
-            <input id="username" data-corners="false" type="text" name="USERLOGIN" value=""
-                   placeholder="Username" onkeypress="return submitOnEnter(event, 'login_Form')"/>
-            <input data-corners="false" type="password" name="PASSWDLOGIN" value=""
-                   placeholder="Password" onkeypress="return submitOnEnter(event, 'login_Form')"/>
-        </p>
-        <p class="input button" id="login" onclick="submitForm(this)">LOGIN</p>
+            echo "<p class='error'>" . $fatalerror . "</p>";
+        } else
+        {
+            if (isset($error))
+            {
+                echo "<p class='error'>" . $error . "</p>";
+            }
+            ?>
+            <p class="input">
+                <input id="username" data-corners="false" type="text" name="USERLOGIN" value=""
+                       placeholder="Username" onkeypress="return submitOnEnter(event, 'login_Form')"/>
+                <input data-corners="false" type="password" name="PASSWDLOGIN" value=""
+                       placeholder="Password" onkeypress="return submitOnEnter(event, 'login_Form')"/>
+            </p>
+            <p class="input button" id="login" onclick="submitForm(this)">LOGIN</p>
+
+        <?php } ?>
     </form>
 
 </div>
