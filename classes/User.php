@@ -107,11 +107,16 @@ class User
 
     public function HasPassword($psw)
     {
-        //TODO implement salted password check
-        if ($this->password == md5($psw))
-            return TRUE;
-        else
-            return FALSE;
+        if ($this->salt == NULL)
+        {
+            if ($this->password == md5($psw))
+                return TRUE;
+        } else
+        {
+            if ($this->password == md5($psw . $this->salt))
+                return TRUE;
+        }
+        return FALSE;
     }
 
     public function ChangePassword($new, $newR)
@@ -128,8 +133,8 @@ class User
 
     public function SetPassword($password)
     {
-        //TODO better way to store password
-        $this->password = md5($password);
+        $this->salt = md5(mt_rand());
+        $this->password = md5($password . $this->salt);
         $this->modified = TRUE;
     }
 
@@ -138,7 +143,7 @@ class User
 
         if ($this->modified and !$this->new)
         {
-            $query = "UPDATE $this->sourceTab SET PASSWORD=?, VALID=?, ADMIN=? WHERE ID=? ";
+            $query = "UPDATE $this->sourceTab SET PASSWORD=?, VALID=?, ADMIN=?, SALT=? WHERE ID=? ";
             try
             {
                 $sql = $this->db->prepare($query);
@@ -146,7 +151,7 @@ class User
             {
                 throw new Exception("Impossible to Update " . $this->id . " user");
             }
-            $data = array($this->password, $this->valid, $this->admin, $this->id);
+            $data = array($this->password, $this->valid, $this->admin, $this->salt, $this->id);
             //var_dump($data);
 
         } else if ($this->new)
@@ -155,7 +160,7 @@ class User
             {
                 throw new Exception("Some user's attribute are not specified");
             }
-            $query = "INSERT INTO $this->sourceTab(ID, PASSWORD, VALID, ADMIN) VALUES(?, ?, ?, ?)";
+            $query = "INSERT INTO $this->sourceTab(ID, PASSWORD, VALID, ADMIN, SALT) VALUES(?, ?, ?, ?, ?)";
             try
             {
                 $sql = $this->db->prepare($query);
@@ -163,7 +168,7 @@ class User
             {
                 throw new Exception("Impossible to insert " . $this->id . " user");
             }
-            $data = array($this->id, $this->password, $this->valid, $this->admin);
+            $data = array($this->id, $this->password, $this->valid, $this->admin, $this->salt);
         } else return FALSE;
 
         try
