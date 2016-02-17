@@ -20,7 +20,6 @@ if (!isset($_SESSION['USERNAME']))
     {
         $user = new User($_SESSION['USERNAME']);
 
-        //TODO Clear Input
         if (isset($_POST['OLDPWD']) && isset($_POST['PWD']) && isset($_POST['PWDR']))
         {
             if ($_POST['OLDPWD'] == "" || $_POST['PWD'] == "" || $_POST['PWDR'] == "")

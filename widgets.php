@@ -16,6 +16,8 @@ if (!isset($_SESSION['USERNAME']))
         $user = new User($_SESSION['USERNAME']);
         $app = Application::getAppInfo();
         $fs = $app->GetFS();
+        if (count($fs) <= 0)
+            throw new Exception("You have to configure widget in config.ini file");
         $output = shell_exec("df");
         $o = explode("\n", $output);
         $used = 0;
@@ -77,15 +79,16 @@ if (!isset($_SESSION['USERNAME']))
             echo "<p class='error'>" . $error . "</p>";
         } else
         {
-            foreach ($data as $fs)
-            {
-                $name = preg_replace("/ +/", "", $fs[0]);
-                echo "<div class=\"chart\"><p>Available space on $fs[0]</p>";
-                echo "<div class=\"pie\" id=\"free_$name\">please wait...</div>";
-                echo "Used: " . number_format($fs[1] / pow(2, 20), 1) . "GB - ";
-                echo "Free: " . number_format($fs[2] / pow(2, 20), 1) . "GB";
-                echo "</div>";
-            }
+            if ($data != NULL)
+                foreach ($data as $fs)
+                {
+                    $name = preg_replace("/ +/", "", $fs[0]);
+                    echo "<div class=\"chart\"><p>Available space on $fs[0]</p>";
+                    echo "<div class=\"pie\" id=\"free_$name\">please wait...</div>";
+                    echo "Used: " . number_format($fs[1] / pow(2, 20), 1) . "GB - ";
+                    echo "Free: " . number_format($fs[2] / pow(2, 20), 1) . "GB";
+                    echo "</div>";
+                }
         }
         ?>
 

@@ -30,7 +30,14 @@ if (!isset($_SESSION['USERNAME']))
                 if ($_POST['USERNAME'] == "")
                     throw new Exception("You Have to Select an Username");
 
-                $new = new User($_POST['USERNAME']);
+                $username = clearInput($_POST['USERNAME']);
+                $usernameN = strip_tags($username);
+                if ($usernameN != $username)
+                    throw new Exception("Inserted Username is not valid");
+
+                $username = strtolower($username);
+
+                $new = new User($username);
                 $new->SetAdmin(isset($_POST['ADMIN']));
                 $new->SetValid(isset($_POST['ACTIVE']));
                 $new->Save();

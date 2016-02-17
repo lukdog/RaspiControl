@@ -25,7 +25,6 @@ if (!isset($_SESSION['USERNAME']))
             throw new Exception("You have not admin permissions, this abuse will be reported");
         } else
         {
-            //TODO Clear Input
             if (isset($_POST['USERNAME']) && isset($_POST['PWD']) && isset($_POST['PWDR']))
             {
                 if ($_POST['USERNAME'] == "" || $_POST['PWD'] == "" || $_POST['PWDR'] == "")
@@ -35,8 +34,15 @@ if (!isset($_SESSION['USERNAME']))
                 if ($_POST['PWD'] != $_POST['PWDR'])
                     throw new Exception("Two passwords are different");
 
+                $username = clearInput($_POST['USERNAME']);
+                $usernameN = strip_tags($username);
+                if ($usernameN != $username)
+                    throw new Exception("Inserted Username is not valid");
+
+                $username = strtolower($username);
+
                 $new = new User();
-                $new->SetID($_POST['USERNAME']);
+                $new->SetID($username);
                 $new->SetPassword($_POST['PWD']);
                 $new->SetAdmin(isset($_POST['ADMIN']));
                 $new->SetValid(TRUE);
