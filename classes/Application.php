@@ -22,6 +22,7 @@ class Application
     private $hostDB;
     private $passDB;
     private $nameDB;
+    private $fsMonitor = NULL;
 
     final private function __construct()
     {
@@ -49,6 +50,9 @@ class Application
 
         if (isset($ini['App_Name']))
             $this->appName = $ini['App_Name'];
+
+        if (isset($ini['FS_Monitor']))
+            $this->fsMonitor = $ini['FS_Monitor'];
     }
 
     public static function getAppInfo()
@@ -77,6 +81,11 @@ class Application
     public function GetDBPass()
     {
         return $this->passDB;
+    }
+
+    public function GetFS()
+    {
+        return $this->fsMonitor;
     }
 
     public function IsConfigured()

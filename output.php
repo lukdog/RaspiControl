@@ -80,6 +80,7 @@ if (!isset($_SESSION['USERNAME']))
         <p class="category">Tools</p>
         <ul class="scripts">
             <!-- TODO define Tools Menu -->
+            <li><a href="widgets.php">Widgets</a></li>
             <li><a href="passwd.php">Change Password</a></li>
             <?php if ($user->IsAdmin())
             { ?>

@@ -172,6 +172,7 @@ form.passwd > p.input > input {
 div.moduser > form,
 div.adduser > form,
 div.passwd > form,
+div.widgets > section,
 div.out > section,
 div.index > section {
     margin-top: 65px;
@@ -374,4 +375,37 @@ form.moduser > section.selector > ul.list > li {
     border: 1px solid black;
     line-height: 50px;
     height: 50px;
+}
+
+section.widgets {
+    background: none;
+}
+
+section.widgets > div.chart {
+    width: 95%;
+    margin: 0 auto;
+    height: auto;
+    background: none;
+    display: block;
+    color: #d6264f;
+    font-size: 18pt;
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 2px solid #d6264f;
+}
+
+section.widgets > div.chart > div.pie {
+    margin: 0 auto;
+    background: none;
+    display: block;
+    padding: 10px 0;
+}
+
+section.widgets > div.chart > p {
+    display: block;
+    color: white;
+    line-height: 40px;
+    height: 40px;
+    margin: 0 auto;
+    padding: 2px 0;
 }

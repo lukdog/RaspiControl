@@ -83,6 +83,7 @@ if (!isset($_SESSION['USERNAME']))
     <section class="toolsMenu">
         <ul class="scripts">
             <!-- TODO define Tools Menu -->
+            <li><a href="widgets.php">Widgets</a></li>
             <li><a href="passwd.php">Change Password</a></li>
             <?php if ($user->IsAdmin())
             { ?>
