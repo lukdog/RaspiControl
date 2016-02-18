@@ -22,6 +22,7 @@ class Application
     private $hostDB;
     private $passDB;
     private $nameDB;
+    private $outputDir;
     private $fsMonitor = NULL;
 
     final private function __construct()
@@ -41,13 +42,18 @@ class Application
 
         if (!isset($json['Database']['DB_Username']) || !isset($json['Database']['DB_Host']) || !isset($json['Database']['DB_Name']) || !isset($json['Database']['DB_Password']))
         {
-            throw new Exception("You have to provide DB credential in config.ini file");
+            throw new Exception("You have to provide DB credential in config file");
         }
 
         $this->userDB = $json['Database']['DB_Username'];
         $this->hostDB = $json['Database']['DB_Host'];
         $this->nameDB = $json['Database']['DB_Name'];
         $this->passDB = $json['Database']['DB_Password'];
+
+        if (!isset($json['runningScriptDir']))
+            throw new Exception("You have to provide a directory for Running Script in config file");
+
+        $this->outputDir = $json['runningScriptDir'];
 
         if (isset($json['App_Name']))
             $this->appName = $json['App_Name'];
