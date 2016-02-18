@@ -2,7 +2,7 @@
 
 /*
  * Application.php
- * Class that store information about the Running Instance of RaspiControl application
+ * Class that store information about the Running Instance of RaspiControl Application
  */
 
 include_once dirname(__FILE__) . "/DBConnection.php";
@@ -15,7 +15,7 @@ class Application
     //TODO Use appName and think about other attributes
     private static $app = NULL;
     private $db = NULL;
-    private $config = "config.ini";
+    private $config = "config.json";
     private $appName = "RaspiControl";
     private $configured = FALSE;
     private $userDB;
@@ -26,33 +26,34 @@ class Application
 
     final private function __construct()
     {
-        $ini = NULL;
+        $json = NULL;
         try
         {
-            $ini = parse_ini_file($this->config);
+            $text = file_get_contents($this->config);
+            $json = json_decode($text, true);
         } catch (Exception $e)
         {
             throw new Exception("Config.ini presents some syntax errors");
         }
 
-        if ($ini == FALSE)
+        if ($json == FALSE)
             throw new Exception("Impossible to Read config file");
 
-        if (!isset($ini['DB_Username']) || !isset($ini['DB_Host']) || !isset($ini['DB_Password']) || !isset($ini['DB_Name']))
+        if (!isset($json['Database']['DB_Username']) || !isset($json['Database']['DB_Host']) || !isset($json['Database']['DB_Name']) || !isset($json['Database']['DB_Password']))
         {
             throw new Exception("You have to provide DB credential in config.ini file");
         }
 
-        $this->userDB = $ini['DB_Username'];
-        $this->hostDB = $ini['DB_Host'];
-        $this->nameDB = $ini['DB_Name'];
-        $this->passDB = $ini['DB_Password'];
+        $this->userDB = $json['Database']['DB_Username'];
+        $this->hostDB = $json['Database']['DB_Host'];
+        $this->nameDB = $json['Database']['DB_Name'];
+        $this->passDB = $json['Database']['DB_Password'];
 
-        if (isset($ini['App_Name']))
-            $this->appName = $ini['App_Name'];
+        if (isset($json['App_Name']))
+            $this->appName = $json['App_Name'];
 
-        if (isset($ini['FS_Monitor']))
-            $this->fsMonitor = $ini['FS_Monitor'];
+        if (isset($json['FS_Monitor']))
+            $this->fsMonitor = $json['FS_Monitor'];
     }
 
     public static function getAppInfo()

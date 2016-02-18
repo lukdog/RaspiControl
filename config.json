@@ -1,0 +1,20 @@
+{
+  "Database": {
+    "DB_Host": "localhost",
+    "DB_Name": "dbname",
+    "DB_Username": "user",
+    "DB_Password": "password"
+  },
+  "FS_Monitor": {
+    "/": "Main Disk",
+    "/media/nas/": "Nas"
+  },
+  "runningScriptDir": "/tmp/.raspicontrol",
+  "services": {
+    "apache2": "start|stop|force-reload",
+    "vsftpd": "start|stop"
+  },
+  "actions": {
+    "reboot": "reboot"
+  }
+}

@@ -17,7 +17,7 @@ if (!isset($_SESSION['USERNAME']))
         $app = Application::getAppInfo();
         $fs = $app->GetFS();
         if (count($fs) <= 0)
-            throw new Exception("You have to configure widget in config.ini file");
+            throw new Exception("You have to configure widget in config file");
         $output = shell_exec("df");
         $o = explode("\n", $output);
         $used = 0;
