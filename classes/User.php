@@ -22,8 +22,6 @@ class User
     private $db = NULL;
     private $sourceTab = "USERS";
 
-
-    //Costruttore della classe Utente
     public function __construct($id = NULL)
     {
 
