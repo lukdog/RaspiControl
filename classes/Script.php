@@ -2,6 +2,7 @@
 
 include_once dirname(__FILE__) . "/DBConnection.php";
 include_once dirname(__FILE__) . "/User.php";
+include_once dirname(__FILE__) . "/Application.php";
 
 /*
  * Class Script
@@ -15,6 +16,7 @@ class Script
     private $id = NULL;
     private $name = NULL;
     private $cmd = NULL;
+    private $type = NULL;
     private $category = NULL;
     private $alert = NULL;
     private $new = FALSE;
@@ -48,6 +50,7 @@ class Script
                     $this->id = $info['ID'];
                     $this->name = $info["NAME"];
                     $this->cmd = $info["CMD"];
+                    $this->type = $info["TYPE"];
                     $this->category = $info["CATEGORY"];
                     $this->alert = $info["ALERT"];
 
@@ -134,8 +137,26 @@ class Script
         {
             try
             {
-                //TODO Manage errors or no Output
-                $output = shell_exec($this->cmd);
+
+                $dir = Application::getAppInfo()->GetOutputDir();
+                $cmd = NULL;
+
+                if ($this->type == 1)
+                {
+                    $cmd = "touch $dir/$this->cmd";
+                } else if ($this->type == 2)
+                {
+                    $cmd = "rm -f $dir/$this->cmd";
+                } else if ($this->type == 3)
+                {
+                    $cmd = "echo \" \" >> $dir/$this->cmd";
+                } else throw new Exception("Invalid type for script with id: $this->id");
+
+                if (shell_exec($cmd) != NULL)
+                    throw new Exception("Impossible to Execute this action now");
+
+                sleep(2);
+                $output = shell_exec('tail -n1 /tmp/.raspicontrol/.output');
                 return $output;
             } catch (Exception $e)
             {

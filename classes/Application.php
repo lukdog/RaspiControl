@@ -95,6 +95,11 @@ class Application
         return $this->fsMonitor;
     }
 
+    public function GetOutputDir()
+    {
+        return $this->outputDir;
+    }
+
     public function IsConfigured()
     {
         if ($this->configured) return TRUE;
