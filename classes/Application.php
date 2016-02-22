@@ -15,7 +15,7 @@ class Application
     //TODO Use appName and think about other attributes
     private static $app = NULL;
     private $db = NULL;
-    private $config = "config.json";
+    private $config = "/etc/RaspiControl/config.json";
     private $appName = "RaspiControl";
     private $configured = FALSE;
     private $userDB;

@@ -132,7 +132,7 @@ if __name__ == "__main__":
     try:
         # Read JSON Configuration
         try:
-            with open("/etc/raspicontrol/config.json") as data_file:
+            with open("/etc/RaspiControl/config.json") as data_file:
                 data = json.load(data_file)
 
             logger.debug("Config file loaded")
@@ -165,6 +165,9 @@ if __name__ == "__main__":
                 control.modify_event(event)
             else:
                 logger.debug("Received UNKNOWN event: " + event.strip())
+    except KeyboardInterrupt as e:
+        logger.warn("Terminated with keyboard interrupt")
+        exit(0)
     except SystemExit as e:
         logger.warn("System has terminated RaspiControl")
     except Exception as e:

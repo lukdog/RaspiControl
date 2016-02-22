@@ -10,6 +10,7 @@
     "/media/nas/": "Nas"
   },
   "runningScriptDir": "/tmp/.raspicontrol",
+  "logLevel": "INFO",
   "services": {
     "apache2": "start|stop|force-reload",
     "vsftpd": "start|stop"

@@ -64,9 +64,6 @@ class Script
 
     }
 
-
-    /*Metodi di Get per ottenere informazioni da script presente nel database*/
-
     public function GetId()
     {
         return $this->id;
