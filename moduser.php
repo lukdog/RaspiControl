@@ -95,14 +95,14 @@ if (!isset($_SESSION['USERNAME']))
             ?>
             <section class="selector">
                 <ul>
-                    <li class="select" onclick='$("ul.list").slideToggle("normal")'>
+                    <li class="select" onclick='$("#listUser").slideToggle("normal")'>
                         <input id="username" type="text" name="USERNAME" value=""
                                placeholder="Select User" onfocus="this.blur()" readonly/>
                         <span></span>
                     </li>
                 </ul>
-                <ul class="list">
-                    <?php printUsers() ?>
+                <ul class="list" id="listUser">
+                    <?php printUsers("username", "listUser") ?>
                 </ul>
             </section>
             <div class="switch">

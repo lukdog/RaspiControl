@@ -128,7 +128,7 @@ function getCategories()
 /*
  * Function that retrieves list of user and print the selection menu
  */
-function printUsers()
+function printUsers($idInput, $idList)
 {
     $sql = "SELECT ID FROM USERS";
     $db = DBConnection::getConnection();
@@ -138,7 +138,7 @@ function printUsers()
         foreach ($db->query($sql) as $tmp)
         {
             $id = $tmp['ID'];
-            echo "<li about=\"$id\" onclick=\"setSelectValue(this)\">$id</li>";
+            echo "<li about=\"$id\" onclick=\"setSelectValue(this, '$idInput', '$idList')\">$id</li>";
         }
     } catch (Exception $e)
     {

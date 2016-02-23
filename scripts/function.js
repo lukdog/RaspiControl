@@ -71,10 +71,11 @@ function selectBtn(butt) {
     }
 }
 
-function setSelectValue(butt) {
+function setSelectValue(butt, id, listId) {
     var selected = butt.getAttribute("about");
     var l = selected.length;
-    $("li.select > input").val(selected);
-    $("li.select > input").width(l * 9);
-    $("ul.list").slideToggle("normal");
+
+    $("#" + id).val(selected);
+    $("#" + id).width(l * 9);
+    $("#" + listId).slideToggle("normal");
 }
