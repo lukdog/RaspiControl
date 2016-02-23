@@ -92,11 +92,11 @@ if (!isset($_SESSION['USERNAME']))
         }
         ?>
 
+        <a href="index.php">BACK</a>
     </section>
     <section class="toolsMenu">
         <ul class="scripts">
             <!-- TODO define Tools Menu -->
-            <li><a href="index.php">Home</a></li>
             <li><a href="passwd.php">Change Password</a></li>
             <?php if ($user->IsAdmin())
             { ?>

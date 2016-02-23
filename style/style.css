@@ -256,6 +256,7 @@ div.out > section.out > div {
     line-height: 40px;
 }
 
+div.widgets > section.widgets > a,
 div.out > section.out > a {
     text-decoration: none;
     background-color: #d6264f;
