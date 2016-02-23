@@ -89,6 +89,7 @@ if (!isset($_SESSION['USERNAME']))
             { ?>
                 <li><a href="adduser.php">Add User</a></li>
                 <li><a href="moduser.php">Modify User</a></li>
+                <li><a href="authorize.php">Authorize User</a></li>
             <?php } ?>
         </ul>
 
