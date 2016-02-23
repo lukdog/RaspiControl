@@ -147,6 +147,28 @@ function printUsers($idInput, $idList)
 }
 
 /*
+ * Function that retrieves list of scripts and print the selection menu
+ */
+function printScripts($idInput, $idList)
+{
+    $sql = "SELECT ID, NAME FROM SCRIPTS";
+    $db = DBConnection::getConnection();
+    $users = NULL;
+    try
+    {
+        foreach ($db->query($sql) as $tmp)
+        {
+            $id = $tmp['ID'];
+            $name = $tmp['NAME'];
+            echo "<li about=\"$id\" onclick=\"setSelectValue(this, '$idInput', '$idList')\">$name</li>";
+        }
+    } catch (Exception $e)
+    {
+        throw new Exception("Impossible to retrieve the script list");
+    }
+}
+
+/*
  * Redirect to a new Page in a correct way
  */
 function redirect($url, $code)

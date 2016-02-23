@@ -136,6 +136,37 @@ class User
         $this->modified = TRUE;
     }
 
+    public function authorize($script)
+    {
+        $idu = $this->db->quote($this->id);
+        $ids = $this->db->quote($script->GetId());
+        $query = "SELECT ID_USER FROM AUTHORIZATIONS WHERE ID_USER=$idu AND ID_SCRIPT=$ids";
+        $res = NULL;
+        try
+        {
+            $res = $this->db->query($query);
+            if ($res->rowCount() != 0)
+                return;
+        } catch (Exception $e)
+        {
+            throw new Exception("Impossible to execute command, retry later");
+        }
+
+        $query = "INSERT INTO AUTHORIZATIONS(ID_USER, ID_SCRIPT) VALUES(?,?)";
+        try
+        {
+            $sql = $this->db->prepare($query);
+            $data = array($this->id, $script->GetId());
+            if (!$sql->execute($data))
+                throw new Exception();
+        } catch (Exception $e)
+        {
+            throw new Exception("Impossible to authorize " . $this->id . " user");
+        }
+
+
+    }
+
     public function Save()
     {
 
