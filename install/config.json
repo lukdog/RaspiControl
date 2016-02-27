@@ -1,4 +1,5 @@
 {
+  "App_Name": "RaspiControl",
   "Database": {
     "DB_Host": "localhost",
     "DB_Name": "dbname",
@@ -6,8 +7,7 @@
     "DB_Password": "password"
   },
   "FS_Monitor": {
-    "/": "Main Disk",
-    "/media/nas/": "Nas"
+    "/": "Main Disk"
   },
   "runningScriptDir": "/tmp/.raspicontrol",
   "logLevel": "INFO",
