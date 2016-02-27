@@ -147,13 +147,23 @@ class Script
                 } else if ($this->type == 3)
                 {
                     $cmd = "echo \" \" >> $dir/$this->cmd";
+                } else if ($this->type == 4)
+                {
+                    $cmd = $this->cmd;
                 } else throw new Exception("Invalid type for script with id: $this->id");
 
-                if (shell_exec($cmd) != NULL)
-                    throw new Exception("Impossible to Execute this action now");
+                if ($this->type < 4)
+                {
+                    if (shell_exec($cmd) != NULL)
+                        throw new Exception("Impossible to Execute this action now");
 
-                sleep(2);
-                $output = shell_exec('tail -n1 /tmp/.raspicontrol/.output');
+                    sleep(2);
+                    $output = shell_exec('tail -n1 /tmp/.raspicontrol/.output');
+                } else
+                {
+                    $output = shell_exec($cmd);
+                }
+
                 return $output;
             } catch (Exception $e)
             {
