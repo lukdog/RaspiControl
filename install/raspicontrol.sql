@@ -1,13 +1,12 @@
 -- phpMyAdmin SQL Dump
--- version 3.4.11.1deb2+deb7u2
+-- version 4.2.12
 -- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Feb 04, 2016 at 03:15 PM
--- Server version: 5.5.47
--- PHP Version: 5.4.45-0+deb7u2
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+-- Generation Time: Feb 27, 2016 at 12:03 PM
+-- Server version: 5.5.46-0
+-- PHP Version: 5.6.14-0
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
@@ -27,10 +26,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `AUTHORIZATIONS` (
-  `ID_USER` varchar(20) NOT NULL,
-  `ID_SCRIPT` int(11) NOT NULL,
-  PRIMARY KEY (`ID_USER`,`ID_SCRIPT`),
-  KEY `ID_SCRIPT` (`ID_SCRIPT`)
+  `ID_USER`   varchar(20) NOT NULL,
+  `ID_SCRIPT` INT(11)     NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Table that stores users authorizations';
 
 -- --------------------------------------------------------
@@ -40,8 +37,7 @@ CREATE TABLE IF NOT EXISTS `AUTHORIZATIONS` (
 --
 
 CREATE TABLE IF NOT EXISTS `CATEGORIES` (
-  `CATEGORY` VARCHAR(20) NOT NULL,
-  PRIMARY KEY (`CATEGORY`)
+  `CATEGORY` VARCHAR(20) NOT NULL
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = latin1
@@ -54,17 +50,17 @@ CREATE TABLE IF NOT EXISTS `CATEGORIES` (
 --
 
 CREATE TABLE IF NOT EXISTS `SCRIPTS` (
-  `ID`       int(11) NOT NULL AUTO_INCREMENT,
-  `NAME`     varchar(20) NOT NULL,
+  `ID`       INT(11)     NOT NULL,
+  `NAME`     VARCHAR(20) NOT NULL,
   `CATEGORY` varchar(20) NOT NULL,
-  `CMD`      text NOT NULL,
-  `ALERT`    TEXT,
-  PRIMARY KEY (`ID`)
+  `CMD`      TEXT        NOT NULL,
+  `TYPE`     SMALLINT(6) NOT NULL DEFAULT '1',
+  `ALERT`    TEXT
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = latin1
-  COMMENT = 'Table that stores available scripts'
-  AUTO_INCREMENT = 7;
+  COMMENT = 'Table that stores available scripts';
 
 -- --------------------------------------------------------
 
@@ -73,20 +69,60 @@ CREATE TABLE IF NOT EXISTS `SCRIPTS` (
 --
 
 CREATE TABLE IF NOT EXISTS `USERS` (
-  `NID`      int(11)     NOT NULL AUTO_INCREMENT,
-  `ID`       varchar(20) NOT NULL,
+  `NID`      INT(11)     NOT NULL,
+  `ID`       VARCHAR(20) NOT NULL,
   `PASSWORD` varchar(32) NOT NULL,
   `SALT`     VARCHAR(32)          DEFAULT NULL,
-  `VALID`    tinyint(1)  NOT NULL DEFAULT '1',
-  `ADMIN`    TINYINT(1)  NOT NULL DEFAULT '0',
-  PRIMARY KEY (`ID`),
-  UNIQUE KEY `NID` (`NID`)
+  `VALID`    TINYINT(1)  NOT NULL DEFAULT '1',
+  `ADMIN`    TINYINT(1)  NOT NULL DEFAULT '0'
 )
   ENGINE = InnoDB
+  AUTO_INCREMENT = 1
   DEFAULT CHARSET = latin1
-  COMMENT = 'Table that stores users'
-  AUTO_INCREMENT = 9;
+  COMMENT = 'Table that stores users';
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `AUTHORIZATIONS`
+--
+ALTER TABLE `AUTHORIZATIONS`
+ADD PRIMARY KEY (`ID_USER`, `ID_SCRIPT`), ADD KEY `ID_SCRIPT` (`ID_SCRIPT`);
+
+--
+-- Indexes for table `CATEGORIES`
+--
+ALTER TABLE `CATEGORIES`
+ADD PRIMARY KEY (`CATEGORY`);
+
+--
+-- Indexes for table `SCRIPTS`
+--
+ALTER TABLE `SCRIPTS`
+ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `USERS`
+--
+ALTER TABLE `USERS`
+ADD PRIMARY KEY (`ID`), ADD UNIQUE KEY `NID` (`NID`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `SCRIPTS`
+--
+ALTER TABLE `SCRIPTS`
+MODIFY `ID` INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 1;
+--
+-- AUTO_INCREMENT for table `USERS`
+--
+ALTER TABLE `USERS`
+MODIFY `NID` INT(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT = 1;
 --
 -- Constraints for dumped tables
 --
