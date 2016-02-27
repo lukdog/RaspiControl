@@ -6,117 +6,191 @@
  * Time: 14:58
  */
 
-include_once dirname(__FILE__) . "../classes/DBConnection.php";
-include_once dirname(__FILE__) . "../classes/User.php";
+include_once dirname(__FILE__) . "/../classes/DBConnection.php";
+include_once dirname(__FILE__) . "/../classes/User.php";
 
-//Funzione che crea il form
-function CreaForm(User $utente)
+
+/*
+ * Function that check if parameters correspond to an existent and active user in DB
+ */
+function checklogin($username, $password)
 {
-    $nomeutente = $utente->getID();
-    $categorie = ElencoCategorie();
-    $db = ConnettiDB::getConnection();
-    if (count($categorie) == 0)
+
+    $username = trim($username);
+    $usernameN = strip_tags($username);
+
+    if ($usernameN != $username)
+        throw new Exception("Inserted Username is not valid");
+
+    $username = strtolower($username);
+    $password = clearInput($password);
+
+    if ($username == "" || $password == "")
+        throw new Exception("Username and Password cannot be empty");
+
+    if (strlen($username) > 20)
+        throw new Exception("Username cannot be longer then 20 chars");
+
+    $utente = new User($username);
+
+    if (!$utente->IsValid())
+        throw new Exception("User is not valid or it's not active");
+
+    if ($utente->HasPassword($password))
+        return TRUE;
+    else
+        throw new Exception("Invalid Password");
+
+}
+
+
+/*
+ * Function that Build index Menu for the user passed as parameter
+ */
+function buildMenu(User $user)
+{
+    $username = $user->getID();
+    $categories = getCategories();
+    $db = DBConnection::getConnection();
+
+    if (count($categories) == 0)
     {
-        echo "Nessuna Categoria Presente";
+        throw new Exception("There are no available categories for you");
     } else
     {
-        foreach ($categorie as $temp)
+        foreach ($categories as $catName)
         {
-            echo "<fieldset data-role='controlgroup' data-corners='false'>";
-            echo "<legend>" . $temp . "</legend>";
-            echo "<hr>";
 
-            $sql = "SELECT ID, NOME FROM SCRIPTS WHERE CATEGORIA = '$temp' AND ID IN (SELECT ID_SCRIPT FROM PERMESSI WHERE ID_UTENTE='$nomeutente')";
+            $id = str_replace(" ", "", $catName) . "_btn";
+            echo "<p class='category' id='$id' onclick='showPanel(this)'>" . $catName . "</p>";
 
-            foreach ($db->query($sql) as $script)
+            $query = "SELECT ID, NAME, ALERT FROM SCRIPTS WHERE CATEGORY = '$catName' AND ID IN (SELECT ID_SCRIPT FROM AUTHORIZATIONS WHERE ID_USER='$username')";
+
+            try
             {
-                $nomescript = $script["NOME"];
-                $idscript = $script["ID"];
-                $riga = "<button type='submit' value='$idscript' name='script' class='ui-shadow ui-btn ui-corner-all ui-icon-home'>" . $nomescript . "</button>";
-                echo $riga;
+                $res = $db->query($query);
+                $namePanel = str_replace(" ", "", $catName) . "_Panel";
+                if ($res->rowCount() <= 0)
+                {
+                    echo "<ul class=\"scripts\" id=\"$namePanel\">";
+                    echo "<p class='error'>No Available Scripts in this category</p>";
+                    echo "</ul>";
+                } else
+                {
+
+                    echo "<ul class=\"scripts\" id=\"$namePanel\">";
+                    while (($info = $res->fetch(PDO::FETCH_ASSOC)))
+                    {
+                        $scriptName = $info["NAME"];
+                        $scriptId = $info["ID"];
+                        $scriptAlert = $info["ALERT"];
+                        $row = "<li id=\"$scriptId\" about=\"$scriptAlert\" onclick=\"execCmd(this)\">$scriptName</li>";
+                        echo $row;
+                    }
+                    echo "</ul>";
+
+                }
+            } catch (Exception $e)
+            {
+                throw new Exception("Impossible to Execute Query that retrieve scripts for category " . $catName . ": " . $e->getMessage());
             }
-            echo "</fieldset>";
+
+
         }
     }
 }
 
-//Funzione che crea un array contenente tutte le categorie
-function ElencoCategorie()
+/*
+ * Function That retrieves the list of categories where there are scripts for user passed as parameter
+ */
+function getCategories()
 {
-    $sql = "SELECT * FROM CATEGORIE";
-    $db = ConnettiDB::getConnection();
+    //TODO Select only categories where there are scripts for specified user (passed as parameter)
+    $sql = "SELECT * FROM CATEGORIES";
+    $db = DBConnection::getConnection();
     $count = 0;
-    $categorie = NULL;
-    foreach ($db->query($sql) as $tmp)
+    $categories = NULL;
+    try
     {
-        $categorie[$count] = $tmp['CATEGORIA'];
-        $count++;
-    }
-    return $categorie;
-}
-
-//Funzione che effettua il logout
-function Logout()
-{
-    $_SESSION = array();
-    session_unset();
-    session_destroy();
-}
-
-//Funzione che inserisce un nuovo utente
-function addUser($username, $password)
-{
-    $usr = new User();
-    $usr->SetID($username);
-    $usr->SetPassword($password);
-    $usr->SetAttivo(TRUE);
-    $usr->SetAdmin(FALSE);
-    $ctrl = $usr->Save();
-    return $ctrl;
-}
-
-//Funzione che modifica un utente già esistente
-function modUser($username, $password = NULL, $attivo = NULL, $admin = NULL)
-{
-    $usr = new User($username);
-    //echo $admin;
-    if ($usr->GetID() == NULL)
+        foreach ($db->query($sql) as $tmp)
+        {
+            $categories[$count] = $tmp['CATEGORY'];
+            $count++;
+        }
+    } catch (Exception $e)
     {
-        echo "Utente Non esistente";
-        return FALSE;
+        throw new Exception("Impossible to retrieve the ist of categories");
     }
 
-    if ($password != NULL)
-        $usr->SetPassword($password);
-
-    if ($attivo != NULL)
-        $usr->SetAttivo($attivo);
-
-    if ($admin != NULL)
-        $usr->SetAdmin($admin);
-
-    if ($password != NULL or $attivo != NULL or $admin != NULL)
-    {
-        $ctrl = $usr->Save();
-        return $ctrl;
-    }
-    return FALSE;
+    return $categories;
 }
 
-function userSelect()
+/*
+ * Function that retrieves list of user and print the selection menu
+ */
+function printUsers($idInput, $idList)
 {
-    $sql = "SELECT ID FROM UTENTI";
-    $db = ConnettiDB::getConnection();
-
-    echo "<label for='select-choice-1'>Scegli Utente:</label>";
-    echo "<select class='scegliUser' name='username' id='select-choice-1'>";
-
-    foreach ($db->query($sql) as $tmp)
+    $sql = "SELECT ID FROM USERS";
+    $db = DBConnection::getConnection();
+    $users = NULL;
+    try
     {
-        $nome = $tmp["ID"];
-        echo "<option value='$nome'>$nome</option>";
+        foreach ($db->query($sql) as $tmp)
+        {
+            $id = $tmp['ID'];
+            echo "<li about=\"$id\" onclick=\"setSelectValue(this, '$idInput', '$idList')\">$id</li>";
+        }
+    } catch (Exception $e)
+    {
+        throw new Exception("Impossible to retrieve the users list");
     }
-    echo "</select>";
+}
+
+/*
+ * Function that retrieves list of scripts and print the selection menu
+ */
+function printScripts($idInput, $idList)
+{
+    $sql = "SELECT ID, NAME FROM SCRIPTS";
+    $db = DBConnection::getConnection();
+    $users = NULL;
+    try
+    {
+        foreach ($db->query($sql) as $tmp)
+        {
+            $id = $tmp['ID'];
+            $name = $tmp['NAME'];
+            echo "<li about=\"$id\" onclick=\"setSelectValue(this, '$idInput', '$idList')\">$name</li>";
+        }
+    } catch (Exception $e)
+    {
+        throw new Exception("Impossible to retrieve the script list");
+    }
+}
+
+/*
+ * Redirect to a new Page in a correct way
+ */
+function redirect($url, $code)
+{
+    if ($code == 301)
+        header("HTTP/1.1 $code Moved Permanently");
+    else if ($code == 302)
+        header("HTTP/1.1 $code Moved Temporary");
+
+    header("Location: $url");
+
+
+}
+
+/*
+ * Clear Input
+ */
+function clearInput($str)
+{
+    $str = trim($str);
+    $str = htmlentities($str);
+    return $str;
 }
 
 ?>

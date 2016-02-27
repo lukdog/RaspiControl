@@ -1,5 +1,11 @@
 <?php
-include_once dirname(__FILE__) . "/classes/Script.php";
+
+/*
+ * Page that permits to an user to change his password
+ */
+
+
+include_once dirname(__FILE__) . "/classes/User.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 session_start();
 
@@ -8,43 +14,49 @@ if (!isset($_SESSION['USERNAME']))
     redirect("login.php", 301);
 } else
 {
-    //TODO check session duration
+
+    //TODO check Session Duration
     try
     {
         $user = new User($_SESSION['USERNAME']);
-        if (!$user->IsAdmin())
+
+        if (isset($_POST['OLDPWD']) && isset($_POST['PWD']) && isset($_POST['PWDR']))
         {
-            //TODO Reporting through logger
-            throw new Exception("You have not admin permissions, this abuse will be reported");
-        } else
-        {
-            if (isset($_POST['USERNAME']))
+            if ($_POST['OLDPWD'] == "" || $_POST['PWD'] == "" || $_POST['PWDR'] == "")
+                throw new Exception("Fields cannot be empty");
+
+            try
             {
-                if ($_POST['USERNAME'] == "")
-                    throw new Exception("You Have to Select an Username");
-
-                $username = clearInput($_POST['USERNAME']);
-                $usernameN = strip_tags($username);
-                if ($usernameN != $username)
-                    throw new Exception("Inserted Username is not valid");
-
-                $username = strtolower($username);
-
-                $new = new User($username);
-                $new->SetAdmin(isset($_POST['ADMIN']));
-                $new->SetValid(isset($_POST['ACTIVE']));
-                $new->Save();
-                $msg = "User modified successfully";
+                if ($user->HasPassword($_POST['OLDPWD']))
+                {
+                    $user->ChangePassword($_POST['PWD'], $_POST['PWDR']);
+                } else
+                {
+                    $error = "Wrong Password";
+                    $_SESSION = array();
+                    if (ini_get("session.use_cookies"))
+                    {
+                        $params = session_get_cookie_params();
+                        setcookie(session_name(), '', time() - 3600 * 24, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+                    }
+                    session_destroy();
+                }
+            } catch (Exception $e)
+            {
+                $error = $e->getMessage();
             }
+
+            $msg = "Password Changed Successfully";
         }
+
     } catch (Exception $e)
     {
         $error = $e->getMessage();
     }
 
 }
-?>
 
+?>
 
 <html>
 <head>
@@ -55,7 +67,7 @@ if (!isset($_SESSION['USERNAME']))
     <meta name="msapplication-tap-highlight" content="no"/>
     <meta name="apple-mobile-web-app-capable" content="no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Stylesheet-->
+    <!-- Stylesheet -->
     <link rel="stylesheet" href="style/style.css"/>
     <!--Google Fonts !-->
     <link href='http://fonts.googleapis.com/css?family=Economica:400,700' rel='stylesheet' type='text/css'>
@@ -69,15 +81,14 @@ if (!isset($_SESSION['USERNAME']))
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" onresize="setFooterWidth()"
       onload="setFooterWidth()">
-<div class="page moduser">
+<div class="page passwd" data-role="page" data-theme="b">
 
     <header>
         RaspiControl
     </header>
 
 
-    <form class="moduser" id="moduser_Form" action="moduser.php" method="POST" data-ajax="false">
-
+    <form id="passwd_Form" class="passwd" action="passwd.php" method="POST" data-ajax="false">
         <?php
         if (isset($error))
             echo "<p class='error'>$error</p>";
@@ -85,42 +96,31 @@ if (!isset($_SESSION['USERNAME']))
             echo "<p class='message'>$msg</p>";
         else
         {
+
             ?>
-            <section class="selector">
-                <ul>
-                    <li class="select" onclick='$("#listUser").slideToggle("normal")'>
-                        <input id="username" type="text" name="USERNAME" value=""
-                               placeholder="Select User" onfocus="this.blur()" readonly/>
-                        <span></span>
-                    </li>
-                </ul>
-                <ul class="list" id="listUser">
-                    <?php printUsers("username", "listUser") ?>
-                </ul>
-            </section>
-            <div class="switch">
-                <p>Active:</p>
-                <label class="on" for="checkActive" onclick="selectBtn(this)">YES</label>
-                <input type="checkbox" name="ACTIVE" id="checkActive" checked>
-            </div>
-            <div class="switch">
-                <p>Admin:</p>
-                <label class="off" for="checkAdmin" onclick="selectBtn(this)">NO</label>
-                <input type="checkbox" name="ADMIN" id="checkAdmin">
-            </div>
-            <p class="input button" id="moduser" onclick="submitForm(this)">MODIFY</p>
-
+            <p class="input">
+                <label for="oldpwd">Old Password:</label>
+                <input id="oldpwd" type="password" name="OLDPWD" value=""
+                       placeholder="Old Password" onkeypress="return submitOnEnter(event, 'passwd_Form')"/>
+                <label for="pwd1">New Password:</label>
+                <input id="pwd1" type="password" name="PWD" value=""
+                       placeholder="Password" onkeypress="return submitOnEnter(event, 'passwd_Form')"/>
+                <label for="pwd2">Repeat new Password:</label>
+                <input id="pwd2" type="password" name="PWDR" value=""
+                       placeholder="Repeat Password" onkeypress="return submitOnEnter(event, 'passwd_Form')"/>
+            </p>
+            <p class="input button" id="passwd" onclick="submitForm(this)">CHANGE</p>
         <?php } ?>
-
     </form>
 
 
     <footer>
+
         <ul>
             <li class="footerTab">
                 <?php
-                if (isset($error) && $user->IsAdmin())
-                    echo "<a href=\"moduser.php\">BACK</a>";
+                if (isset($error))
+                    echo "<a href=\"passwd.php\">BACK</a>";
                 else echo "<a href=\"index.php\">BACK</a>";
                 ?>
             </li>
@@ -128,6 +128,7 @@ if (!isset($_SESSION['USERNAME']))
                 <a href="index.php?LOGOUT">LOGOUT</a>
             </li>
         </ul>
+
     </footer>
 </div>
 

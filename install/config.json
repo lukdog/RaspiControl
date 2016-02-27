@@ -1,0 +1,21 @@
+{
+  "App_Name": "RaspiControl",
+  "Database": {
+    "DB_Host": "localhost",
+    "DB_Name": "dbname",
+    "DB_Username": "user",
+    "DB_Password": "password"
+  },
+  "FS_Monitor": {
+    "/": "Main Disk"
+  },
+  "runningScriptDir": "/tmp/.raspicontrol",
+  "logLevel": "INFO",
+  "services": {
+    "apache2": "start|stop|force-reload",
+    "vsftpd": "start|stop"
+  },
+  "actions": {
+    "reboot": "reboot"
+  }
+}

@@ -14,70 +14,64 @@ class User
     protected $nid = NULL;
     protected $id = NULL;
     protected $password = NULL;
-    protected $attivo = 0;
+    protected $salt = NULL;
+    protected $valid = 0;
     protected $admin = 0;
-    private $nuovo = FALSE;
-    private $modificato = FALSE;
+    private $new = FALSE;
+    private $modified = FALSE;
     private $db = NULL;
-    private $sourceTab = "UTENTI";
+    private $sourceTab = "USERS";
 
-
-    //Costruttore della classe Utente
     public function __construct($id = NULL)
     {
 
         $this->db = DBConnection::getConnection();
         if ($id == NULL)
         {
-            $this->nuovo = TRUE;
+            $this->new = TRUE;
         } else
         {
-            //TODO MIgliorare eseuczione query poco sicura
-            foreach ($this->db->query("SELECT * FROM $this->sourceTab WHERE ID='$id'") as $temp)
+            $id = $this->db->quote($id);
+            $query = "SELECT * FROM $this->sourceTab WHERE ID=$id";
+            try
             {
-                $this->nid = $temp["NID"];
-                $this->id = $temp["ID"];
-                $this->password = $temp["PASSWORD"];
-                $this->attivo = $temp["ATTIVO"];
-                $this->admin = $temp["ADMIN"];
-                if ($id != $this->id)
+                $res = $this->db->query($query);
+                if ($res->rowCount() != 1)
+                    $this->valid = FALSE;
+                else
                 {
-                    //TODO migliorare gestione untente non esistente magari con un COUNT(*);
-                    $this->attivo = 0;
+                    $info = $res->fetch(PDO::FETCH_ASSOC);
+                    $this->nid = $info['NID'];
+                    $this->id = $info['ID'];
+                    $this->password = $info["PASSWORD"];
+                    $this->salt = $info["SALT"];
+                    $this->valid = $info["VALID"];
+                    $this->admin = $info["ADMIN"];
+
                 }
+            } catch (Exception $e)
+            {
+                throw new Exception("Impossible to Execute Query that retrieve an user: " . $e->getMessage());
             }
         }
     }
 
-    public function SetID($id)
+    public function SetValid($at)
     {
-        $this->id = $id;
-        $this->modificato = TRUE;
-    }
-
-    public function SetPassword($password)
-    {
-        $this->password = md5($password);
-        $this->modificato = TRUE;
-    }
-
-    public function SetAttivo($at)
-    {
-        if ($at == "TRUE")
-            $this->attivo = 1;
+        if ($at == TRUE)
+            $this->valid = 1;
         else
-            $this->attivo = 0;
-        $this->modificato = TRUE;
+            $this->valid = 0;
+        $this->modified = TRUE;
     }
 
     public function SetAdmin($ad)
     {
-        if ($ad == "TRUE")
+        if ($ad == true)
             $this->admin = 1;
         else
             $this->admin = 0;
-        $this->modificato = TRUE;
-        echo $this->admin;
+        $this->modified = TRUE;
     }
 
     public function GetID()
@@ -85,9 +79,17 @@ class User
         return $this->id;
     }
 
-    public function IsAttivo()
+    public function SetID($id)
     {
-        if ($this->attivo == 1)
+        if (strlen($id) > 20)
+            throw new Exception("Error: username can be at least of 20 chars");
+        $this->id = $id;
+        $this->modified = TRUE;
+    }
+
+    public function IsValid()
+    {
+        if ($this->valid == 1)
             return TRUE;
         else
             return FALSE;
@@ -101,49 +103,101 @@ class User
             return FALSE;
     }
 
-    public function HaPassword($psw)
+    public function HasPassword($psw)
     {
-        if ($this->password == md5($psw))
-            return TRUE;
-        else
-            return FALSE;
+        if ($this->salt == NULL)
+        {
+            if ($this->password == md5($psw))
+                return TRUE;
+        } else
+        {
+            if ($this->password == md5($psw . $this->salt))
+                return TRUE;
+        }
+        return FALSE;
     }
 
-    //Funzione per salvataggio
+    public function ChangePassword($new, $newR)
+    {
+        if ($new != $newR)
+        {
+            throw new Exception("Two passwords are not equal");
+        }
+
+        $this->SetPassword($new);
+        $this->Save();
+
+    }
+
+    public function SetPassword($password)
+    {
+        $this->salt = md5(mt_rand());
+        $this->password = md5($password . $this->salt);
+        $this->modified = TRUE;
+    }
+
+    public function authorize($script)
+    {
+        $idu = $this->db->quote($this->id);
+        $ids = $this->db->quote($script->GetId());
+        $query = "SELECT ID_USER FROM AUTHORIZATIONS WHERE ID_USER=$idu AND ID_SCRIPT=$ids";
+        $res = NULL;
+        try
+        {
+            $res = $this->db->query($query);
+            if ($res->rowCount() != 0)
+                return;
+        } catch (Exception $e)
+        {
+            throw new Exception("Impossible to execute command, retry later");
+        }
+
+        $query = "INSERT INTO AUTHORIZATIONS(ID_USER, ID_SCRIPT) VALUES(?,?)";
+        try
+        {
+            $sql = $this->db->prepare($query);
+            $data = array($this->id, $script->GetId());
+            if (!$sql->execute($data))
+                throw new Exception();
+        } catch (Exception $e)
+        {
+            throw new Exception("Impossible to authorize " . $this->id . " user");
+        }
+
+
+    }
+
     public function Save()
     {
 
-        if ($this->modificato and !$this->nuovo)
+        if ($this->modified and !$this->new)
         {
-            $query = "UPDATE $this->sourceTab SET PASSWORD=?, ATTIVO=?, ADMIN=? WHERE ID=? ";
+            $query = "UPDATE $this->sourceTab SET PASSWORD=?, VALID=?, ADMIN=?, SALT=? WHERE ID=? ";
             try
             {
                 $sql = $this->db->prepare($query);
             } catch (Exception $e)
             {
-                echo $e->getMessage();
-                return FALSE;
+                throw new Exception("Impossible to Update " . $this->id . " user");
             }
-            $data = array($this->password, $this->attivo, $this->admin, $this->id);
-            var_dump($data);
+            $data = array($this->password, $this->valid, $this->admin, $this->salt, $this->id);
+            //var_dump($data);
 
-        } else if ($this->nuovo)
+        } else if ($this->new)
         {
-            if ($this->id == NULL or $this->password == NULL or $this->attivo == NULL)
+            if ($this->id == NULL or $this->password == NULL or $this->valid == NULL or $this->admin == NULL)
             {
-                echo "WARNING: utilizzare metodi SET";
-                return FALSE;
+                throw new Exception("Some user's attribute are not specified");
             }
-            $query = "INSERT INTO $this->sourceTab(ID, PASSWORD, ATTIVO) VALUES(?, ?, ?)";
+            $query = "INSERT INTO $this->sourceTab(ID, PASSWORD, VALID, ADMIN, SALT) VALUES(?, ?, ?, ?, ?)";
             try
             {
                 $sql = $this->db->prepare($query);
             } catch (Exception $e)
             {
-                echo $e->getMessage();
-                return FALSE;
+                throw new Exception("Impossible to insert " . $this->id . " user");
             }
-            $data = array($this->id, $this->password, $this->attivo);
+            $data = array($this->id, $this->password, $this->valid, $this->admin, $this->salt);
         } else return FALSE;
 
         try
@@ -151,22 +205,39 @@ class User
             $this->db->beginTransaction();
         } catch (Exception $e)
         {
-            echo $e->getMessage();
-            return FALSE;
+            throw new Exception("Impossible to securely manage users table");
         }
+
+        if ($this->new)
+        {
+            try
+            {
+                $newid = $this->db->quote($this->id);
+                $query = "SELECT ID FROM $this->sourceTab WHERE ID=$newid FOR UPDATE";
+                $res = $this->db->query($query);
+                if ($res->rowCount() != 0)
+                    throw new Exception();
+            } catch (Exception $e)
+            {
+                $this->db->rollBack();
+                throw new Exception("Username is not valid, it's already in use");
+            }
+        }
+
 
         try
         {
-            $sql->execute($data);
-            $this->db->commit();
-            $this->nuovo = FALSE;
-            $this->modificato = FALSE;
-            return TRUE;
+            if ($sql->execute($data))
+            {
+                $this->db->commit();
+                $this->new = FALSE;
+                $this->modified = FALSE;
+                return TRUE;
+            } else throw new Exception();
         } catch (Exception $e)
         {
             $this->db->rollBack();
-            echo $e->getMessage();
-            return FALSE;
+            throw new Exception("Impossible to correctly conclude the operation");
         }
     }
 

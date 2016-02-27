@@ -1,5 +1,12 @@
 <?php
-include_once dirname(__FILE__) . "/classes/Script.php";
+
+/*
+ * Page that Permits to an Admin to create a new User
+ */
+
+//TODO think about a new system to create users, password, etc..
+
+include_once dirname(__FILE__) . "/classes/User.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 session_start();
 
@@ -18,10 +25,14 @@ if (!isset($_SESSION['USERNAME']))
             throw new Exception("You have not admin permissions, this abuse will be reported");
         } else
         {
-            if (isset($_POST['USERNAME']))
+            if (isset($_POST['USERNAME']) && isset($_POST['PWD']) && isset($_POST['PWDR']))
             {
-                if ($_POST['USERNAME'] == "")
-                    throw new Exception("You Have to Select an Username");
+                if ($_POST['USERNAME'] == "" || $_POST['PWD'] == "" || $_POST['PWDR'] == "")
+                    throw new Exception("Fields cannot be empty");
+
+
+                if ($_POST['PWD'] != $_POST['PWDR'])
+                    throw new Exception("Two passwords are different");
 
                 $username = clearInput($_POST['USERNAME']);
                 $usernameN = strip_tags($username);
@@ -30,11 +41,13 @@ if (!isset($_SESSION['USERNAME']))
 
                 $username = strtolower($username);
 
-                $new = new User($username);
+                $new = new User();
+                $new->SetID($username);
+                $new->SetPassword($_POST['PWD']);
                 $new->SetAdmin(isset($_POST['ADMIN']));
-                $new->SetValid(isset($_POST['ACTIVE']));
+                $new->SetValid(TRUE);
                 $new->Save();
-                $msg = "User modified successfully";
+                $msg = "User added successfully";
             }
         }
     } catch (Exception $e)
@@ -43,8 +56,8 @@ if (!isset($_SESSION['USERNAME']))
     }
 
 }
-?>
 
+?>
 
 <html>
 <head>
@@ -69,14 +82,14 @@ if (!isset($_SESSION['USERNAME']))
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" onresize="setFooterWidth()"
       onload="setFooterWidth()">
-<div class="page moduser">
+<div class="page adduser">
 
     <header>
         RaspiControl
     </header>
 
 
-    <form class="moduser" id="moduser_Form" action="moduser.php" method="POST" data-ajax="false">
+    <form id="adduser_Form" class="adduser" action="adduser.php" method="POST" data-ajax="false">
 
         <?php
         if (isset($error))
@@ -86,41 +99,36 @@ if (!isset($_SESSION['USERNAME']))
         else
         {
             ?>
-            <section class="selector">
-                <ul>
-                    <li class="select" onclick='$("#listUser").slideToggle("normal")'>
-                        <input id="username" type="text" name="USERNAME" value=""
-                               placeholder="Select User" onfocus="this.blur()" readonly/>
-                        <span></span>
-                    </li>
-                </ul>
-                <ul class="list" id="listUser">
-                    <?php printUsers("username", "listUser") ?>
-                </ul>
-            </section>
-            <div class="switch">
-                <p>Active:</p>
-                <label class="on" for="checkActive" onclick="selectBtn(this)">YES</label>
-                <input type="checkbox" name="ACTIVE" id="checkActive" checked>
-            </div>
+
+            <p class="input">
+                <label for="username">Username:</label>
+                <input id="username" type="text" name="USERNAME" value=""
+                       placeholder="Username" onkeypress="return submitOnEnter(event, 'adduser_Form')"/>
+                <label for="pwd1">Password:</label>
+                <input id="pwd1" type="password" name="PWD" value=""
+                       placeholder="Password" onkeypress="return submitOnEnter(event, 'adduser_Form')"/>
+                <label for="pwd2">Repeat Password:</label>
+                <input id="pwd2" type="password" name="PWDR" value=""
+                       placeholder="Repeat Password" onkeypress="return submitOnEnter(event, 'adduser_Form')"/>
+            </p>
+
             <div class="switch">
                 <p>Admin:</p>
-                <label class="off" for="checkAdmin" onclick="selectBtn(this)">NO</label>
-                <input type="checkbox" name="ADMIN" id="checkAdmin">
+                <label class="off" for="check" onclick="selectBtn(this)">NO</label>
+                <input type="checkbox" name="ADMIN" id="check">
             </div>
-            <p class="input button" id="moduser" onclick="submitForm(this)">MODIFY</p>
+
+            <p class="input button" id="adduser" onclick="submitForm(this)">CREATE</p>
 
         <?php } ?>
-
     </form>
-
 
     <footer>
         <ul>
             <li class="footerTab">
                 <?php
                 if (isset($error) && $user->IsAdmin())
-                    echo "<a href=\"moduser.php\">BACK</a>";
+                    echo "<a href=\"adduser.php\">BACK</a>";
                 else echo "<a href=\"index.php\">BACK</a>";
                 ?>
             </li>

@@ -1,249 +1,416 @@
 html,
 body,
-.pagina{
+.page {
     background: #2b2b2b;
     font-family: 'Economica', sans-serif;
     height: 100%;
+    overflow-y: hidden;
 }
 
 ::-webkit-scrollbar {
     display: none;
 }
 
-/*PAGINA DI LOGIN*/
-
-.login{
-    margin-top: 20px;
-}
-
-.paginamodpass input,
-.paginanewuser input,
-.login input{
-    height: 65px;
+div.page > header {
     font-size: 22pt;
-    border-style: none;
-    text-align: left;
-    color: white;
-    font-family: 'Economica', sans-serif;
-}
-
-.paginamodpass input:focus,
-.paginanewuser input:focus,
-.login input:focus{
-    height: 65px;
-    font-size: 20pt;
-    border-style: none;
-    text-align: left;
-    color: white;
-    box-shadow: none;
-    border-color: #d6264f;
-}
-
-.login .ui-body-b{
-    border-color: #d6264f;
-}
-
-.login .ui-body-b:focus{
-
-    -webkit-box-shadow: 0 0 0px 	#2b2b2b ;
-    -moz-box-shadow: 0 0 0px 		#2b2b2b ;
-    box-shadow: 0 0 0px 			#2b2b2b ;
-
-}
-
-.login .ui-btn{
-    color: #2b2b2b;
-    background: #d6264f;
-    border-color: #d6264f;
-    text-shadow: none;
+    text-align: center;
+    line-height: 60px;
     height: 60px;
-    font-family: 'Economica', sans-serif;
-    font-size: 16pt;
-}
-
-.login .ui-btn.ui-btn:focus{
-    background: #d6264f;
-    -webkit-box-shadow: 0 0 0px 	#2b2b2b ;
-    -moz-box-shadow: 0 0 0px 		#2b2b2b ;
-    box-shadow: 0 0 0px 			#2b2b2b ;
-}
-
-.login .ui-btn.ui-btn:active{
-    background-color: 		#d6264f ;
-    border-color:	 		#d6264f;
-    color: 					#fff;
-    text-shadow: 0 1px 0  #005599;
-}
-
-.login .ui-btn:hover{
-    color: #2b2b2b;
-    background: #d6264f;
-    border-color: #d6264f;
-    text-shadow: none;
-}
-
-.pagina .ui-content{
-    margin: 0 auto;
-}
-
-.login .logo{
-    margin: 0 auto;
-    width: 135px;
-    height: 163px;
-    background: url('images/logorasp.png');
-    margin-bottom: 20px;
-}
-
-/*Pagina INDEX*/
-.paginamodpass .ui-header,
-.paginanewuser .ui-header,
-.paginamoduser .ui-header,
-.paginamenu .ui-header,
-.paginaout .ui-header{
-    height: 70px;
     width: 100%;
-    padding-top: 0px;
-    font-size: 20pt;
+    padding: 0 5px;
     position: fixed;
     background: #2b2b2b;
+    display: block;
     border-color: #2b2b2b;
     color: #d6264f;
     z-index: 1;
     opacity: 0.9;
+    font-weight: bold;
 }
 
-.paginamodpass .ui-footer,
-.paginanewuser .ui-footer,
-.paginamoduser .ui-footer,
-.paginaout .ui-footer,
-.paginamenu .ui-footer{
-
-    height: 30px;
+div.page > footer {
+    height: auto;
+    width: 100%;
     font-size: 16pt;
-    margin-bottom: 0px;
-    z-index: 1;
-    opacity: 0.9;
-}
-
-.paginamodpass .ui-footer .ui-btn,
-.paginanewuser .ui-footer .ui-btn,
-.paginamoduser .ui-footer .ui-btn,
-.paginaout .ui-footer .ui-btn,
-.paginamenu .ui-footer .ui-btn{
-    height: 25px;
-    font-size: 14pt;
-    color: #c3c1c1;
-    font-family: 'Economica', sans-serif;
-}
-
-.paginamodpass .ui-footer .ui-btn-active,
-.paginanewuser .ui-footer .ui-btn-active,
-.paginamoduser .ui-footer .ui-btn-active,
-.paginaout .ui-footer .ui-btn-active,
-.paginamenu .ui-footer .ui-btn-active{
-    background: #d6264f;
-    color: #2b2b2b;
-    border-color: #2b2b2b;
-    text-shadow: #d6264f;
-}
-
-.menu{
-    margin-top: 80px;
-}
-
-.menu fieldset{
+    display: block;
+    background-color: #2b2b2b;
     margin-top: 20px;
-    border-color: #d6264f;
 }
 
-.menu legend{
-    color: white;
-    font-size: 15pt;
+div.page > footer > ul {
+    margin: 0;
+    padding: 0;
+    background: #2b2b2b;
 }
 
-.menu hr{
+div.page > footer > ul > li {
+    list-style-type: none;
+    display: inline-block;
+    background-color: #d6264f;
+    margin: 0;
+    padding: 0;
+    width: auto;
     border: 2px solid #d6264f;
 }
 
-.menu .ui-btn{
-    height: 55px;
-    color: #c3c1c1;
-    font-size: 16pt;
-    font-family: 'Economica', sans-serif;
-}
-
-.categoria .ui-btn{
-    width: 100%;
-}
-
-/**PAGINA DI OUTPUT**/
-.out{
-    margin-top: 80px;
-}
-
-.out textarea{
-    font-size: 18pt;
-    border-style: none;
-    text-align: left;
-    color: white;
-    font-family: 'Economica', sans-serif;
-
-}
-
-.out .ui-state-disabled{
-    opacity:1;
-}
-
-#select-choice-1-button,
-.out .ui-btn{
+div.page > footer > ul > li > a {
     color: #2b2b2b;
-    background: #d6264f;
-    border-color: #d6264f;
-    text-shadow: none;
-    height: 60px;
-    font-family: 'Economica', sans-serif;
-    font-size: 16pt;
+    margin: 0;
+    width: 100%;
+    text-decoration: none;
+    display: block;
+    line-height: 56px;
+    text-align: center;
+    padding: 0;
+
 }
 
-.out .ui-corner-all{
-    border-radius: 0;
+.page {
+    overflow-y: scroll;
 }
 
-#select-choice-1-button{
-    padding-top: 18px;
-    padding-bottom: 0px;
-    height: 42px;
-}
-
-.modpass label,
-.newuser label,
-.moduser label{
+.info,
+.message,
+.error {
+    color: white;
+    background: red;
+    width: 100%;
+    text-align: center;
     font-size: 15pt;
-    margin-top: 20px;
+    line-height: 40px;
 }
 
-.modpass label,
-.newuser label {
+.message {
+    background: green;
+}
+
+.info {
     color: #d6264f;
+    background: none
 }
 
-
-/** RIMOZIONE OMBRE **/
-/*focus dei vari elementi*/
-.ui-page-theme-b .ui-btn:focus,
-html .ui-bar-b .ui-btn:focus,
-html .ui-body-b .ui-btn:focus,
-html body .ui-group-theme-b .ui-btn:focus,
-html head + body .ui-btn.ui-btn-b:focus,
-    /* Focus buttons and text inputs with div wrap */
-.ui-page-theme-b .ui-focus,
-html .ui-bar-b .ui-focus,
-html .ui-body-b .ui-focus,
-html body .ui-group-theme-b .ui-focus,
-html head + body .ui-btn-b.ui-focus,
-html head + body .ui-body-b.ui-focus {
-    -webkit-box-shadow: 0 0 0px 	#19763e /*{b-active-background-color}*/;
-    -moz-box-shadow: 0 0 0px 		#19763e /*{b-active-background-color}*/;
-    box-shadow: 0 0 0px 			#19763e /*{b-active-background-color}*/;
+form.authorize,
+form.configure,
+form.moduser,
+form.adduser,
+form.passwd,
+form.login {
+    width: 95%;
+    padding: 0 5px;
+    margin: 20px auto 5px auto;
 }
 
+form.configure > p.logo,
+form.login > p.logo {
+    margin: 0 auto;
+    width: 200px;
+    height: 200px;
+    border-color: #2b2b2b;
+    background: url('images/logorasp.png');
+}
+
+form.authorize > p.input,
+form.configure > p.input,
+form.moduser > p.input,
+form.adduser > p.input,
+form.passwd > p.input,
+form.login > p.input {
+    padding-top: 0;
+}
+
+form.configure > p.input > input,
+form.adduser > p.input > input,
+form.passwd > p.input > input,
+form.login > p.input > input {
+    display: block;
+    font-size: 22pt;
+    color: white;
+    background-color: #2b2b2b;
+    border: 2px solid #d6264f;
+    line-height: 40px;
+    height: 60px;
+    width: 100%;
+    padding: 0 10px;
+    margin-top: 10px;
+    font-family: 'Economica', sans-serif;
+    border-radius: 0;
+
+}
+
+section.out > p.button,
+form.authorize > p.button,
+form.configure > p.button,
+form.moduser > p.button,
+form.adduser > p.button,
+form.passwd > p.button,
+form.login > p.button {
+    background-color: #d6264f;
+    text-align: center;
+    font-weight: bold;
+    font-size: 20pt;
+    line-height: 55px;
+    padding: 0 5px;
+    display: block;
+    color: #2b2b2b;
+    margin-top: 15px;
+    margin-bottom: 2px;
+}
+
+form.configure > p.input > label,
+form.adduser > p.input > label,
+form.passwd > p.input > label {
+    line-height: 40px;
+    color: #9D9D9D;
+    font-size: 16pt;
+    font-weight: bold;
+}
+
+form.configure > p.input > input,
+form.adduser > p.input > input,
+form.passwd > p.input > input {
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+div.authorize > form,
+div.moduser > form,
+div.adduser > form,
+div.passwd > form,
+div.widgets > section,
+div.out > section,
+div.index > section {
+    margin-top: 65px;
+}
+
+section.toolsMenu > p.category,
+section.mainMenu > p.category {
+    color: white;
+    width: 95%;
+    margin: 10px auto;
+    height: 50px;
+    padding: 0 5px;
+    line-height: 50px;
+    font-size: 18pt;
+    border-bottom: 3px solid #d6264f;
+    background: #353232;
+}
+
+section.toolsMenu > ul.scripts,
+section.mainMenu > ul.scripts {
+    width: 95%;
+    margin: 2px auto;
+    padding: 0 5px;
+    display: none;
+}
+
+section.toolsMenu > ul.scripts > li,
+section.mainMenu > ul.scripts > li {
+    width: 100%;
+    display: block;
+    margin: 0;
+    text-align: center;
+    height: 60px;
+    line-height: 60px;
+    font-size: 20pt;
+    background: #333;
+    color: white;
+    border: 1px solid black;
+}
+
+section.toolsMenu > ul.scripts > li:hover,
+section.mainMenu > ul.scripts > li:hover {
+    background: #2b2b2b;
+}
+
+section.toolsMenu {
+    display: none;
+}
+
+section.mainMenu {
+    display: block;
+}
+
+section.toolsMenu > ul.scripts > li > a {
+    margin: 0;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+    display: block;
+    line-height: 60px;
+    text-align: center;
+    padding: 0;
+}
+
+section.toolsMenu > ul.scripts {
+    display: block;
+}
+
+div.out > section.out {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+div.out > section.out > div {
+    padding: 0 10px;
+    background: #333;
+    border: 1px solid black;
+    white-space: pre-wrap;
+    color: white;
+    font-size: 15pt;
+    line-height: 40px;
+}
+
+div.widgets > section.widgets > a,
+div.out > section.out > a {
+    text-decoration: none;
+    background-color: #d6264f;
+    text-align: center;
+    font-weight: bold;
+    font-size: 22pt;
+    line-height: 60px;
+    padding: 0 5px;
+    display: block;
+    color: #2b2b2b;
+    margin-top: 15px;
+    margin-bottom: 2px;
+}
+
+div.switch {
+    color: #9D9D9D;
+    height: 50px;
+    font-size: 16pt;
+    font-weight: bold;
+    line-height: 50px;
+    padding: 0 5px;
+    margin: 10px auto;
+    display: inline-block;
+}
+
+div.switch > input {
+    display: none;
+}
+
+div.switch > p,
+div.switch > label {
+    display: inline-block;
+    height: 46px;
+    line-height: 46px;
+    margin: 0;
+}
+
+div.switch > label {
+    border: 2px solid #d6264f;
+    margin-left: 10px;
+    padding: 0 10px;
+    width: 26px;
+    text-align: center;
+    color: #9D9D9D;
+}
+
+div.switch > label.on {
+    background: #d6264f;
+    color: #2b2b2b;
+}
+
+div.switch > label.off {
+    background: #2b2b2b;
+    color: #9D9D9D;
+}
+
+section.selector {
+    height: auto;
+    width: 100%;
+    font-size: 18pt;
+    display: block;
+    margin: 20px auto;
+}
+
+section.selector > ul.list,
+section.selector > ul {
+    margin: 0 auto;
+    padding: 0;
+    width: 100%;
+    background: none;
+
+}
+
+section.selector > ul.list {
+    background: #d6264f;
+    width: 95%;
+    display: none;
+}
+
+section.selector > ul > li {
+    display: block;
+    background-color: #d6264f;
+    margin: 0 auto;
+    padding: 0 5px;
+    text-align: center;
+}
+
+section.selector > ul > li > input {
+    display: inline-block;
+    line-height: 50px;
+    height: 50px;
+    width: 70%;
+    font-family: 'Economica', sans-serif;
+    border: none;
+    background: none;
+    color: #2b2b2b;
+    font-size: 18pt;
+    text-align: center;
+}
+
+section.selector > ul > li > span {
+    border-top: 10px solid #2b2b2b;
+    border-right: 10px solid transparent;
+    border-left: 10px solid transparent;
+    content: "";
+    display: inline-block;
+    height: 0;
+    width: 0;
+    margin-left: 5px;
+    vertical-align: middle;
+}
+
+section.selector > ul.list > li {
+
+    background-color: #333;
+    color: white;
+    border: 1px solid black;
+    line-height: 50px;
+    height: 50px;
+}
+
+section.widgets {
+    background: none;
+}
+
+section.widgets > div.chart {
+    width: 95%;
+    margin: 0 auto;
+    height: auto;
+    background: none;
+    display: block;
+    color: #d6264f;
+    font-size: 18pt;
+    text-align: center;
+    padding: 10px 0;
+    border-bottom: 2px solid #d6264f;
+}
+
+section.widgets > div.chart > div.pie {
+    margin: 0 auto;
+    background: none;
+    display: block;
+    padding: 10px 0;
+}
+
+section.widgets > div.chart > p {
+    display: block;
+    color: white;
+    line-height: 40px;
+    height: 40px;
+    margin: 0 auto;
+    padding: 2px 0;
+}

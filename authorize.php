@@ -1,4 +1,5 @@
 <?php
+
 include_once dirname(__FILE__) . "/classes/Script.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 session_start();
@@ -23,18 +24,24 @@ if (!isset($_SESSION['USERNAME']))
                 if ($_POST['USERNAME'] == "")
                     throw new Exception("You Have to Select an Username");
 
+                if ($_POST['SCRIPT'] == "")
+                    throw new Exception("You Have to Select an Username");
+
                 $username = clearInput($_POST['USERNAME']);
+                $scriptId = clearInput($_POST['SCRIPT']);
                 $usernameN = strip_tags($username);
                 if ($usernameN != $username)
                     throw new Exception("Inserted Username is not valid");
 
+                if (!is_numeric($scriptId))
+                    throw new Exception("Inserted Script id is not valid");
+
                 $username = strtolower($username);
 
-                $new = new User($username);
-                $new->SetAdmin(isset($_POST['ADMIN']));
-                $new->SetValid(isset($_POST['ACTIVE']));
-                $new->Save();
-                $msg = "User modified successfully";
+                $u = new User($username);
+                $script = new Script($scriptId);
+                $u->authorize($script);
+                $msg = "User successfully authorized";
             }
         }
     } catch (Exception $e)
@@ -69,14 +76,14 @@ if (!isset($_SESSION['USERNAME']))
 
 <body leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0" onresize="setFooterWidth()"
       onload="setFooterWidth()">
-<div class="page moduser">
+<div class="page authorize">
 
     <header>
         RaspiControl
     </header>
 
 
-    <form class="moduser" id="moduser_Form" action="moduser.php" method="POST" data-ajax="false">
+    <form class="authorize" id="authorize_Form" action="authorize.php" method="POST" data-ajax="false">
 
         <?php
         if (isset($error))
@@ -98,17 +105,19 @@ if (!isset($_SESSION['USERNAME']))
                     <?php printUsers("username", "listUser") ?>
                 </ul>
             </section>
-            <div class="switch">
-                <p>Active:</p>
-                <label class="on" for="checkActive" onclick="selectBtn(this)">YES</label>
-                <input type="checkbox" name="ACTIVE" id="checkActive" checked>
-            </div>
-            <div class="switch">
-                <p>Admin:</p>
-                <label class="off" for="checkAdmin" onclick="selectBtn(this)">NO</label>
-                <input type="checkbox" name="ADMIN" id="checkAdmin">
-            </div>
-            <p class="input button" id="moduser" onclick="submitForm(this)">MODIFY</p>
+            <section class="selector">
+                <ul>
+                    <li class="select" onclick='$("#listScript").slideToggle("normal")'>
+                        <input id="script" type="text" name="SCRIPT" value=""
+                               placeholder="Select Script ID" onfocus="this.blur()" readonly/>
+                        <span></span>
+                    </li>
+                </ul>
+                <ul class="list" id="listScript">
+                    <?php printScripts("script", "listScript") ?>
+                </ul>
+            </section>
+            <p class="input button" id="authorize" onclick="submitForm(this)">AUTHORIZE</p>
 
         <?php } ?>
 
@@ -120,7 +129,7 @@ if (!isset($_SESSION['USERNAME']))
             <li class="footerTab">
                 <?php
                 if (isset($error) && $user->IsAdmin())
-                    echo "<a href=\"moduser.php\">BACK</a>";
+                    echo "<a href=\"authorize.php\">BACK</a>";
                 else echo "<a href=\"index.php\">BACK</a>";
                 ?>
             </li>
