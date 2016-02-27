@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Luca
- * User: Luca Doglione
- * Date: 05/10/14
- * Time: 12:17
- */
 include_once dirname(__FILE__) . "/classes/Script.php";
 include_once dirname(__FILE__) . "/functions/functions.php";
 session_start();
