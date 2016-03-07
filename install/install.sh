@@ -18,9 +18,9 @@ then
 fi
 
 # Check Needed packages
-if ! dpkg -l | grep "apache2" > /dev/null
+if ! dpkg -l | grep "apache2" > /dev/null && ! dpkg -l | grep "lighttpd" > /dev/null
 then
-    echo "Apache2 is required, please install it before install RaspiControl"
+    echo "A web Server is required, please install it before install RaspiControl - (Apache2, lighttpd)"
     exit 1
 fi
 
