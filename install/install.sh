@@ -55,7 +55,7 @@ chmod 500 $CMD_DIR/$CMD_NAME >/dev/null 2>&1 || { echo >&2 "Impossible to change
 
 
 # Install Daemon if requested
-if [ $1 -e '-d' ]
+if [ "$1" == "-d" ]
 then
     DAEMON_NAME="/etc/init.d/raspicontrol"
     SCRIPT_NAME="raspicontrol"
