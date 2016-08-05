@@ -178,6 +178,7 @@ div.adduser > form,
 div.passwd > form,
 div.widgets > section,
 div.out > section,
+div.motion > section,
 div.index > section {
     margin-top: 65px;
 }
@@ -260,6 +261,7 @@ div.out > section.out > div {
     line-height: 40px;
 }
 
+div.motion > section.motion > a,
 div.widgets > section.widgets > a,
 div.out > section.out > a {
     text-decoration: none;
@@ -386,6 +388,7 @@ section.widgets {
     background: none;
 }
 
+section.motion > div.stream,
 section.widgets > div.chart {
     width: 95%;
     margin: 0 auto;
@@ -396,6 +399,10 @@ section.widgets > div.chart {
     font-size: 18pt;
     text-align: center;
     padding: 10px 0;
+
+}
+
+section.widgets > div.chart {
     border-bottom: 2px solid #d6264f;
 }
 
@@ -413,4 +420,12 @@ section.widgets > div.chart > p {
     height: 40px;
     margin: 0 auto;
     padding: 2px 0;
+}
+
+section.motion > div.stream > img {
+    display: block;
+    width: 640px;
+    height: 480px;
+    margin-left: auto;
+    margin-right: auto;
 }
